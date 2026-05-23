@@ -1,6 +1,7 @@
 const CategoryModel = require("./category.model");
 const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
+const ApiError = require("../../utils/apiError");
 
 // desc create category
 // path /api/v1/categories
@@ -40,14 +41,12 @@ exports.getAllCategories = asyncHandler(async (req, res) => {
 // path /api/v1/categories/:id
 //access public
 
-exports.getSingleCategory = asyncHandler(async (req, res) => {
+exports.getSingleCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const category = await CategoryModel.findById(id);
 
   if (!category) {
-    return res
-      .status(404)
-      .json({ message: `no category found for this id ${id}` });
+    return next(new ApiError(404, `no category found for this id ${id}`));
   }
 
   res.status(200).json({ data: category });
@@ -57,7 +56,7 @@ exports.getSingleCategory = asyncHandler(async (req, res) => {
 // path /api/v1/categories/:id
 // access private
 
-exports.updateCategory = asyncHandler(async (req, res) => {
+exports.updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
   const updateSlug = slugify(name);
@@ -69,9 +68,7 @@ exports.updateCategory = asyncHandler(async (req, res) => {
   );
 
   if (!category) {
-    return res
-      .status(404)
-      .json({ message: `no category found for this id ${id}` });
+    return next(new ApiError(404, `no category found for this id ${id}`));
   }
 
   res
@@ -83,15 +80,13 @@ exports.updateCategory = asyncHandler(async (req, res) => {
 // path /api/v1/categories/:id
 // access private
 
-exports.deleteCategory = asyncHandler(async (req, res) => {
+exports.deleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const category = await CategoryModel.findByIdAndDelete(id);
 
   if (!category) {
-    return res
-      .status(404)
-      .json({ message: `no category found for this id ${id}` });
+    return next(new ApiError(404, `no category found for this id ${id}`));
   }
 
   res.status(200).json({ message: "category deleted successfully" });
