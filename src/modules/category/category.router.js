@@ -9,5 +9,9 @@ const {
 const router = express.Router();
 
 router.route("/").post(createCategory).get(getAllCategories);
-router.route("/:id").put(updateCategory).delete(deleteCategory);
+router
+  .route("/:id")
+  .get(getSingleCategory)
+  .put(updateCategory)
+  .delete(deleteCategory);
 module.exports = router;
