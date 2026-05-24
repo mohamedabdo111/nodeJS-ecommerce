@@ -15,8 +15,6 @@ const sendErrorForDev = (err, res) => {
 
 const sendErrorForProd = (err, res) => {
   const statusCode = err.statusCode || 500;
-  const status = err.status || "error";
-  const stack = err.stack;
   res.status(statusCode).json({ err: { message: err.message, statusCode } });
 };
 
