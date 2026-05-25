@@ -8,7 +8,9 @@ const {
 } = require("./category.service");
 const { getCategoryValidation, updateCategoryValidation, deleteCategoryValidation, createCategoryValidation } = require("./category.validation");
 const router = express.Router();
+const subCategoryRoute = require("../subCategory/subCategory.route");
 
+router.use("/:categoryId/subCategories" , subCategoryRoute);
 router.route("/").post(createCategoryValidation, createCategory).get(getAllCategories);
 router
   .route("/:id")

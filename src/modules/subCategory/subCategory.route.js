@@ -1,10 +1,9 @@
 const express = require("express");
-const { getAllSubCategories, createSubCategory, getSingleSubCategory, updateSubCategory, deleteSubCategory } = require("./subCategory.service");
+const { getAllSubCategories, createSubCategory, getSingleSubCategory, updateSubCategory, deleteSubCategory, createFilterObj, setCategoryIdToBody } = require("./subCategory.service");
 const { createSubCategoryValidation, getSingleSubCategoryValidation, updateSubCategoryValidation, deleteSubCategoryValidation } = require("./subCategory.validation");
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
-
-router.route("/").get(getAllSubCategories).post(createSubCategoryValidation,createSubCategory);
+router.route("/").get(createFilterObj ,getAllSubCategories).post(setCategoryIdToBody ,createSubCategoryValidation,createSubCategory);
 router.route("/:id").get(getSingleSubCategoryValidation ,getSingleSubCategory).put(updateSubCategoryValidation,updateSubCategory).delete(deleteSubCategoryValidation,deleteSubCategory);
 
 module.exports = router;
