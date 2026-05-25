@@ -1,14 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-const categoryRouter = require("./modules/category/category.route");
-const subCategoryRouter = require("./modules/subCategory/subCategory.route");
+
 const ApiError = require("./utils/apiError");
 const globalErrorHandler = require("./middlewares/error.midleware");
 const app = express();
 dotenv.config({ path: "config.env" });
 
-const PORT = process.env.PORT;
+// routes imports
+const categoryRouter = require("./modules/category/category.route");
+const subCategoryRouter = require("./modules/subCategory/subCategory.route");
+const brandsRouter = require("./modules/brands/brands.route");
 
 app.use(express.json());
 if (process.env.NODE_DEV === "development") {
@@ -19,7 +21,7 @@ if (process.env.NODE_DEV === "development") {
 // Mount
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subCategories", subCategoryRouter);
-
+app.use("/api/v1/brands", brandsRouter);
 
 
 // Handle all routes
