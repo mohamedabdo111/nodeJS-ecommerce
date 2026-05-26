@@ -11,7 +11,7 @@ dotenv.config({ path: "config.env" });
 const categoryRouter = require("./modules/category/category.route");
 const subCategoryRouter = require("./modules/subCategory/subCategory.route");
 const brandsRouter = require("./modules/brands/brands.route");
-
+const productRouter = require("./modules/product/product.route");
 app.use(express.json());
 if (process.env.NODE_DEV === "development") {
   app.use(morgan("dev"));
@@ -22,7 +22,7 @@ if (process.env.NODE_DEV === "development") {
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subCategories", subCategoryRouter);
 app.use("/api/v1/brands", brandsRouter);
-
+app.use("/api/v1/products", productRouter);
 
 // Handle all routes
 app.use((req, res, next) => {

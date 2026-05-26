@@ -1,0 +1,202 @@
+[
+  {
+    "title": "MacBook Pro M3",
+    "slug": "macbook-pro-m3",
+    "description": "Apple MacBook Pro with M3 chip for professional workloads.",
+    "quantity": 14,
+    "price": 95000,
+    "priceAfterDiscount": 91999,
+    "sold": 6,
+    "colors": ["Space Gray", "Silver"],
+    "images": [
+      "https://images.unsplash.com/photo-1517336714739-489689fd1ca8",
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1517336714739-489689fd1ca8",
+    "category": "6853b91b6c8d2b0012ab6666",
+    "subCategories": ["6853b91b6c8d2b0012ab7777"],
+    "brand": "6853b91b6c8d2b0012ab8888",
+    "ratingsAverage": 4.9,
+    "ratingsQuantity": 70
+  },
+  {
+    "title": "Asus ROG Strix G16",
+    "slug": "asus-rog-strix-g16",
+    "description": "Gaming laptop with RTX graphics and high refresh rate display.",
+    "quantity": 9,
+    "price": 78000,
+    "priceAfterDiscount": 74999,
+    "sold": 3,
+    "colors": ["Black"],
+    "images": [
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302",
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1603302576837-37561b2e2302",
+    "category": "6853b91b6c8d2b0012ab6666",
+    "subCategories": ["6853b91b6c8d2b0012ab7777"],
+    "brand": "6853b91b6c8d2b0012ab8888",
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 40
+  },
+  {
+    "title": "Canon EOS R6",
+    "slug": "canon-eos-r6",
+    "description": "Professional mirrorless camera with 4K recording.",
+    "quantity": 11,
+    "price": 67000,
+    "priceAfterDiscount": 64999,
+    "sold": 4,
+    "colors": ["Black"],
+    "images": [
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+      "https://images.unsplash.com/photo-1502920917128-1aa500764ce7"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+    "category": "6853b91b6c8d2b0012ab9999",
+    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "brand": "6853b91b6c8d2b0012abbbbb",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 52
+  },
+  {
+    "title": "PlayStation 5",
+    "slug": "playstation-5",
+    "description": "Sony next-generation gaming console.",
+    "quantity": 20,
+    "price": 32000,
+    "priceAfterDiscount": 30999,
+    "sold": 17,
+    "colors": ["White"],
+    "images": [
+      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db",
+      "https://images.unsplash.com/photo-1621259182978-fbf93132d53d"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db",
+    "category": "6853b91b6c8d2b0012ab9999",
+    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "brand": "6853b91b6c8d2b0012abbbbb",
+    "ratingsAverage": 4.9,
+    "ratingsQuantity": 210
+  },
+  {
+    "title": "Xbox Series X",
+    "slug": "xbox-series-x",
+    "description": "Microsoft gaming console with powerful performance.",
+    "quantity": 16,
+    "price": 29000,
+    "priceAfterDiscount": 27999,
+    "sold": 9,
+    "colors": ["Black"],
+    "images": [
+      "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13",
+      "https://images.unsplash.com/photo-1605901309584-818e25960a8f"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13",
+    "category": "6853b91b6c8d2b0012ab9999",
+    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "brand": "6853b91b6c8d2b0012abbbbb",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 170
+  },
+  {
+    "title": "Adidas Ultraboost",
+    "slug": "adidas-ultraboost",
+    "description": "Premium running shoes with responsive cushioning.",
+    "quantity": 50,
+    "price": 7200,
+    "priceAfterDiscount": 6799,
+    "sold": 31,
+    "colors": ["Black", "White"],
+    "images": [
+      "https://images.unsplash.com/photo-1543508282-6319a3e2621f",
+      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1543508282-6319a3e2621f",
+    "category": "6853b91b6c8d2b0012abcccc",
+    "subCategories": ["6853b91b6c8d2b0012abdddd"],
+    "brand": "6853b91b6c8d2b0012abeeee",
+    "ratingsAverage": 4.6,
+    "ratingsQuantity": 88
+  },
+  {
+    "title": "Puma RS-X",
+    "slug": "puma-rs-x",
+    "description": "Stylish sneakers inspired by retro running designs.",
+    "quantity": 44,
+    "price": 5400,
+    "priceAfterDiscount": 4999,
+    "sold": 22,
+    "colors": ["Blue", "White"],
+    "images": [
+      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",
+    "category": "6853b91b6c8d2b0012abcccc",
+    "subCategories": ["6853b91b6c8d2b0012abdddd"],
+    "brand": "6853b91b6c8d2b0012abeeee",
+    "ratingsAverage": 4.4,
+    "ratingsQuantity": 65
+  },
+  {
+    "title": "Apple Watch Ultra",
+    "slug": "apple-watch-ultra",
+    "description": "Smartwatch designed for sports and outdoor adventures.",
+    "quantity": 28,
+    "price": 35000,
+    "priceAfterDiscount": 33999,
+    "sold": 11,
+    "colors": ["Titanium"],
+    "images": [
+      "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d",
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d",
+    "category": "6853b91b6c8d2b0012ab1111",
+    "subCategories": ["6853b91b6c8d2b0012ab3333"],
+    "brand": "6853b91b6c8d2b0012ab4444",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 140
+  },
+  {
+    "title": "Huawei MatePad Pro",
+    "slug": "huawei-matepad-pro",
+    "description": "High-end Android tablet with productivity features.",
+    "quantity": 13,
+    "price": 26000,
+    "priceAfterDiscount": 24999,
+    "sold": 7,
+    "colors": ["Gray"],
+    "images": [
+      "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0",
+      "https://images.unsplash.com/photo-1589739900243-4b52cd9dd1b5"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0",
+    "category": "6853b91b6c8d2b0012ab1111",
+    "subCategories": ["6853b91b6c8d2b0012ab3333"],
+    "brand": "6853b91b6c8d2b0012ab5555",
+    "ratingsAverage": 4.3,
+    "ratingsQuantity": 33
+  },
+  {
+    "title": "JBL Charge 5",
+    "slug": "jbl-charge-5",
+    "description": "Portable Bluetooth speaker with powerful bass.",
+    "quantity": 35,
+    "price": 7800,
+    "priceAfterDiscount": 7499,
+    "sold": 19,
+    "colors": ["Black", "Red"],
+    "images": [
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b",
+      "https://images.unsplash.com/photo-1589003077984-894e133dabab"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1546435770-a3e426bf472b",
+    "category": "6853b91b6c8d2b0012ab9999",
+    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "brand": "6853b91b6c8d2b0012abbbbb",
+    "ratingsAverage": 4.5,
+    "ratingsQuantity": 120
+  }
+]
