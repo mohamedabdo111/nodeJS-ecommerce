@@ -2,64 +2,71 @@ const ProductModel = require("./product.model");
 const ApiError = require("../../utils/apiError");
 const slugify = require("slugify");
 const { query } = require("express-validator");
+const ApiFeature = require("../../utils/apiFeature");
 
-exports.getProducts = async (
-  page,
-  limit,
-  queryFilters,
-  sort,
-  fields,
-  keyword,
-) => {
+exports.getProducts = async (page, limit, queryFilters) => {
   const skip = (page - 1) * limit;
 
   const filters = {};
-  if (queryFilters.minPrice) {
-    filters.price = {
-      $gte: Number(queryFilters.minPrice),
-      ...filters.price,
-    };
-  }
-  if (queryFilters.maxPrice) {
-    filters.price = {
-      $lte: Number(queryFilters.maxPrice),
-      ...filters.price,
-    };
-  }
+  //   if (queryFilters.minPrice) {
+  //     filters.price = {
+  //       $gte: Number(queryFilters.minPrice),
+  //       ...filters.price,
+  //     };
+  //   }
+  //   if (queryFilters.maxPrice) {
+  //     filters.price = {
+  //       $lte: Number(queryFilters.maxPrice),
+  //       ...filters.price,
+  //     };
+  //   }
 
-  if (queryFilters.category) {
-    filters.category = queryFilters.category;
-  }
-  if (queryFilters.subCategory) {
-    filters.subCategories = queryFilters.subCategory;
-  }
+  //   if (queryFilters.category) {
+  //     filters.category = queryFilters.category;
+  //   }
+  //   if (queryFilters.subCategory) {
+  //     filters.subCategories = queryFilters.subCategory;
+  //   }
 
-  const formattedSort = sort.split(",").join(" ");
-  const formattedFields = fields.split(",").join(" ");
+  //   const formattedSort = sort.split(",").join(" ");
+  //   const formattedFields = fields.split(",").join(" ");
 
   //   search by word
-  if (keyword) {
-    filters.$or = [
-      { title: { $regex: keyword, $options: "i" } },
-      { description: { $regex: keyword, $options: "i" } },
-    ];
-  }
+  //   if (keyword) {
+  //     filters.$or = [
+  //       { title: { $regex: keyword, $options: "i" } },
+  //       { description: { $regex: keyword, $options: "i" } },
+  //     ];
+  //   }
 
-  const products = await ProductModel.find(filters)
-    .skip(skip)
-    .limit(limit)
-    .populate("category", "name")
-    .populate("subCategories", "name")
-    .sort(formattedSort)
-    .select(formattedFields);
+  // build query
 
-  const pagination = {
-    page,
-    limit,
-    results: products.length,
-  };
+  const apiFeature = new ApiFeature(ProductModel.find(), queryFilters, filters)
+    .pagination()
+    .filter()
+    .search()
+    .sort()
+    .limitFields()
+    .pagination();
 
-  return { products, pagination };
+  // execute query
+  const products = await apiFeature.mongoQuery;
+
+  //   const products = await ProductModel.find(filters)
+  //     .skip(skip)
+  //     .limit(limit)
+  //     .populate("category", "name")
+  //     .populate("subCategories", "name")
+  //     .sort(formattedSort)
+  //     .select(formattedFields);
+
+  //   const pagination = {
+  //     page,
+  //     limit,
+  //     results: products.length,
+  //   };
+
+  return { products };
 };
 
 exports.createProduct = async (body) => {

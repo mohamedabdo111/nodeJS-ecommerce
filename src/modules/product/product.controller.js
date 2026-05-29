@@ -6,19 +6,11 @@ exports.getProducts = asyncHandler(async (req, res) => {
   const limit = req.query.limit || 10;
 
   const queryFilters = { ...req.query };
-  const excludeFields = ["page", "limit", "sort", "fields"];
-  excludeFields.forEach((field) => delete queryFilters[field]);
-  const sort = req.query.sort || "-createdAt";
-  const fields = req.query.fields || "";
-  const keyword = req.query.keyword || "";
 
   const { products, pagination } = await productService.getProducts(
     page,
     limit,
     queryFilters,
-    sort,
-    fields,
-    keyword,
   );
 
   res.status(200).json({
