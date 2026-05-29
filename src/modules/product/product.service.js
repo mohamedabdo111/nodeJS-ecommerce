@@ -1,8 +1,16 @@
 const ProductModel = require("./product.model");
 const ApiError = require("../../utils/apiError");
 const slugify = require("slugify");
+const { query } = require("express-validator");
 
-exports.getProducts = async (page, limit, queryFilters, sort) => {
+exports.getProducts = async (
+  page,
+  limit,
+  queryFilters,
+  sort,
+  fields,
+  keyword,
+) => {
   const skip = (page - 1) * limit;
 
   const filters = {};
@@ -27,18 +35,28 @@ exports.getProducts = async (page, limit, queryFilters, sort) => {
   }
 
   const formattedSort = sort.split(",").join(" ");
+  const formattedFields = fields.split(",").join(" ");
+
+  //   search by word
+  if (keyword) {
+    filters.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { description: { $regex: keyword, $options: "i" } },
+    ];
+  }
 
   const products = await ProductModel.find(filters)
     .skip(skip)
     .limit(limit)
     .populate("category", "name")
     .populate("subCategories", "name")
-    .sort(formattedSort);
+    .sort(formattedSort)
+    .select(formattedFields);
 
   const pagination = {
     page,
     limit,
-    totalProductsInThisPage: products.length,
+    results: products.length,
   };
 
   return { products, pagination };
