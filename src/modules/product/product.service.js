@@ -1,76 +1,82 @@
-const asyncHandler = require("express-async-handler");
 const ProductModel = require("./product.model");
 const ApiError = require("../../utils/apiError");
 const slugify = require("slugify");
 
-exports.getProducts = asyncHandler(async (req, res) => {
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 10;
+exports.getProducts = async (page, limit, queryFilters, sort) => {
   const skip = (page - 1) * limit;
 
-  const totalProducts = await ProductModel.countDocuments();
+  const filters = {};
+  if (queryFilters.minPrice) {
+    filters.price = {
+      $gte: Number(queryFilters.minPrice),
+      ...filters.price,
+    };
+  }
+  if (queryFilters.maxPrice) {
+    filters.price = {
+      $lte: Number(queryFilters.maxPrice),
+      ...filters.price,
+    };
+  }
+
+  if (queryFilters.category) {
+    filters.category = queryFilters.category;
+  }
+  if (queryFilters.subCategory) {
+    filters.subCategories = queryFilters.subCategory;
+  }
+
+  const formattedSort = sort.split(",").join(" ");
+
+  const products = await ProductModel.find(filters)
+    .skip(skip)
+    .limit(limit)
+    .populate("category", "name")
+    .populate("subCategories", "name")
+    .sort(formattedSort);
 
   const pagination = {
     page,
     limit,
-    results: totalProducts,
+    totalProductsInThisPage: products.length,
   };
 
-  const products = await ProductModel.find()
-    .skip(skip)
-    .limit(limit)
-    .populate("category", "name")
-    .populate("subCategory", "name");
-  res.status(200).json({
-    status: "success",
-    data: products,
-    pagination,
-  });
-});
+  return { products, pagination };
+};
 
-exports.createProduct = asyncHandler(async (req, res) => {
-  req.body.slug = slugify(req.body.title, { lower: true });
-  const product = await ProductModel.create(req.body);
-  res.status(201).json({
-    status: "success",
-    data: product,
-  });
-});
-exports.updateProduct = asyncHandler(async (req, res, next) => {
-  req.body.slug = slugify(req.body.title);
-  const { id } = req.params;
-  const product = await ProductModel.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
-  if (!product) {
-    return next(new ApiError(404, "Product not found"));
-  }
-  res.status(200).json({
-    status: "success",
-    data: product,
-  });
-});
+exports.createProduct = async (body) => {
+  body.slug = slugify(body.title, { lower: true });
+  return ProductModel.create(body);
+};
 
-exports.getProductById = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+exports.getProductById = async (id) => {
   const product = await ProductModel.findById(id);
   if (!product) {
-    return next(new ApiError(404, "Product not found"));
+    throw new ApiError(404, "Product not found");
   }
-  res.status(200).json({
-    status: "success",
-    data: product,
-  });
-});
+  return product;
+};
 
-exports.deleteProduct = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+exports.updateProduct = async (id, body) => {
+  if (body.title) {
+    body.slug = slugify(body.title, { lower: true });
+  }
+
+  const product = await ProductModel.findByIdAndUpdate(id, body, {
+    new: true,
+  });
+
+  if (!product) {
+    throw new ApiError(404, "Product not found");
+  }
+
+  return product;
+};
+
+exports.deleteProduct = async (id) => {
   const product = await ProductModel.findByIdAndDelete(id);
   if (!product) {
-    return next(new ApiError(404, "Product not found"));
+    throw new ApiError(404, "Product not found");
   }
-  res.status(200).json({
-    status: "success",
-    message: "Product deleted successfully",
-  });
-});
+  return product;
+};

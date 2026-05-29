@@ -1,71 +1,111 @@
 [
   {
+    "title": "iPhone 15 Pro Max",
+    "slug": "iphone-15-pro-max",
+    "description": "Apple flagship smartphone with titanium design and A17 Pro chip.",
+    "quantity": 20,
+    "price": 62000,
+    "priceAfterDiscount": 59999,
+    "sold": 14,
+    "colors": ["Black", "Blue", "White"],
+    "images": [
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1695048133142-1a20484d2569",
+    "category": "6a10e88009e2d4a6f4f2ec07",
+    "subCategories": ["6a1417b275ab87f89d27f1d2", "6a14181875ab87f89d27f1da"],
+    "brand": "6853b91b6c8d2b0012ab4444",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 130
+  },
+  {
+    "title": "Samsung Galaxy S25 Ultra",
+    "slug": "samsung-galaxy-s25-ultra",
+    "description": "Premium Samsung smartphone with advanced AI camera.",
+    "quantity": 15,
+    "price": 54000,
+    "priceAfterDiscount": 51999,
+    "sold": 8,
+    "colors": ["Gray", "Black"],
+    "images": [
+      "https://images.unsplash.com/photo-1598327105666-5b89351aff97",
+      "https://images.unsplash.com/photo-1580910051074-3eb694886505"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1598327105666-5b89351aff97",
+    "category": "6a10e88009e2d4a6f4f2ec07",
+    "subCategories": ["6a1432a1df229e4323c27029", "6a1435f38c3b8eca59e423c7"],
+    "brand": "6853b91b6c8d2b0012ab5555",
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 98
+  },
+  {
+    "title": "Dell XPS 15",
+    "slug": "dell-xps-15",
+    "description": "Professional laptop for developers and creators.",
+    "quantity": 12,
+    "price": 71000,
+    "priceAfterDiscount": 68999,
+    "sold": 5,
+    "colors": ["Silver"],
+    "images": [
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+      "https://images.unsplash.com/photo-1517336714739-489689fd1ca8"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+    "category": "6a10e771b967426f82f1f9fe",
+    "subCategories": ["6a143028719c322e0bfb3e20", "6a143091db39f9fde734eada"],
+    "brand": "6853b91b6c8d2b0012ab8888",
+    "ratingsAverage": 4.9,
+    "ratingsQuantity": 41
+  },
+  {
     "title": "MacBook Pro M3",
     "slug": "macbook-pro-m3",
-    "description": "Apple MacBook Pro with M3 chip for professional workloads.",
-    "quantity": 14,
-    "price": 95000,
-    "priceAfterDiscount": 91999,
-    "sold": 6,
-    "colors": ["Space Gray", "Silver"],
+    "description": "Apple laptop powered by M3 chip for high performance tasks.",
+    "quantity": 9,
+    "price": 98000,
+    "priceAfterDiscount": 94999,
+    "sold": 3,
+    "colors": ["Space Gray"],
     "images": [
       "https://images.unsplash.com/photo-1517336714739-489689fd1ca8",
       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
     ],
     "imageCover": "https://images.unsplash.com/photo-1517336714739-489689fd1ca8",
-    "category": "6853b91b6c8d2b0012ab6666",
-    "subCategories": ["6853b91b6c8d2b0012ab7777"],
+    "category": "6a10e771b967426f82f1f9fe",
+    "subCategories": ["6a1435ea8c3b8eca59e423c5"],
     "brand": "6853b91b6c8d2b0012ab8888",
     "ratingsAverage": 4.9,
-    "ratingsQuantity": 70
+    "ratingsQuantity": 76
   },
   {
-    "title": "Asus ROG Strix G16",
-    "slug": "asus-rog-strix-g16",
-    "description": "Gaming laptop with RTX graphics and high refresh rate display.",
-    "quantity": 9,
-    "price": 78000,
-    "priceAfterDiscount": 74999,
-    "sold": 3,
-    "colors": ["Black"],
+    "title": "Sony WH-1000XM5",
+    "slug": "sony-wh-1000xm5",
+    "description": "Wireless noise cancelling headphones with premium sound quality.",
+    "quantity": 30,
+    "price": 18000,
+    "priceAfterDiscount": 16999,
+    "sold": 22,
+    "colors": ["Black", "Cream"],
     "images": [
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302",
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944"
     ],
-    "imageCover": "https://images.unsplash.com/photo-1603302576837-37561b2e2302",
-    "category": "6853b91b6c8d2b0012ab6666",
-    "subCategories": ["6853b91b6c8d2b0012ab7777"],
-    "brand": "6853b91b6c8d2b0012ab8888",
-    "ratingsAverage": 4.7,
-    "ratingsQuantity": 40
-  },
-  {
-    "title": "Canon EOS R6",
-    "slug": "canon-eos-r6",
-    "description": "Professional mirrorless camera with 4K recording.",
-    "quantity": 11,
-    "price": 67000,
-    "priceAfterDiscount": 64999,
-    "sold": 4,
-    "colors": ["Black"],
-    "images": [
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
-      "https://images.unsplash.com/photo-1502920917128-1aa500764ce7"
-    ],
-    "imageCover": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
-    "category": "6853b91b6c8d2b0012ab9999",
-    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "imageCover": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+    "category": "6a102937efae63ae2b67ce3d",
+    "subCategories": ["6a13002d1595c29dbfcbb360"],
     "brand": "6853b91b6c8d2b0012abbbbb",
-    "ratingsAverage": 4.8,
-    "ratingsQuantity": 52
+    "ratingsAverage": 4.6,
+    "ratingsQuantity": 160
   },
   {
     "title": "PlayStation 5",
     "slug": "playstation-5",
-    "description": "Sony next-generation gaming console.",
-    "quantity": 20,
-    "price": 32000,
-    "priceAfterDiscount": 30999,
+    "description": "Next generation gaming console from Sony.",
+    "quantity": 18,
+    "price": 33000,
+    "priceAfterDiscount": 31500,
     "sold": 17,
     "colors": ["White"],
     "images": [
@@ -73,130 +113,50 @@
       "https://images.unsplash.com/photo-1621259182978-fbf93132d53d"
     ],
     "imageCover": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db",
-    "category": "6853b91b6c8d2b0012ab9999",
-    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "category": "6a10e771b967426f82f1f9fe",
+    "subCategories": ["6a143028719c322e0bfb3e20"],
     "brand": "6853b91b6c8d2b0012abbbbb",
     "ratingsAverage": 4.9,
-    "ratingsQuantity": 210
+    "ratingsQuantity": 220
   },
   {
-    "title": "Xbox Series X",
-    "slug": "xbox-series-x",
-    "description": "Microsoft gaming console with powerful performance.",
-    "quantity": 16,
-    "price": 29000,
-    "priceAfterDiscount": 27999,
-    "sold": 9,
+    "title": "Nike Air Max 270",
+    "slug": "nike-air-max-270",
+    "description": "Comfortable sneakers designed for everyday lifestyle.",
+    "quantity": 55,
+    "price": 6800,
+    "priceAfterDiscount": 6399,
+    "sold": 34,
+    "colors": ["White", "Black", "Red"],
+    "images": [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519"
+    ],
+    "imageCover": "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+    "category": "6a10e88009e2d4a6f4f2ec07",
+    "subCategories": ["6a14181875ab87f89d27f1da", "6a1435f38c3b8eca59e423c7"],
+    "brand": "6853b91b6c8d2b0012abeeee",
+    "ratingsAverage": 4.5,
+    "ratingsQuantity": 180
+  },
+  {
+    "title": "Canon EOS R6",
+    "slug": "canon-eos-r6",
+    "description": "Mirrorless professional camera with excellent low light performance.",
+    "quantity": 7,
+    "price": 69000,
+    "priceAfterDiscount": 66999,
+    "sold": 2,
     "colors": ["Black"],
     "images": [
-      "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13",
-      "https://images.unsplash.com/photo-1605901309584-818e25960a8f"
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+      "https://images.unsplash.com/photo-1502920917128-1aa500764ce7"
     ],
-    "imageCover": "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13",
-    "category": "6853b91b6c8d2b0012ab9999",
-    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
+    "imageCover": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+    "category": "6a102937efae63ae2b67ce3d",
+    "subCategories": ["6a13002d1595c29dbfcbb360"],
     "brand": "6853b91b6c8d2b0012abbbbb",
     "ratingsAverage": 4.8,
-    "ratingsQuantity": 170
-  },
-  {
-    "title": "Adidas Ultraboost",
-    "slug": "adidas-ultraboost",
-    "description": "Premium running shoes with responsive cushioning.",
-    "quantity": 50,
-    "price": 7200,
-    "priceAfterDiscount": 6799,
-    "sold": 31,
-    "colors": ["Black", "White"],
-    "images": [
-      "https://images.unsplash.com/photo-1543508282-6319a3e2621f",
-      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb"
-    ],
-    "imageCover": "https://images.unsplash.com/photo-1543508282-6319a3e2621f",
-    "category": "6853b91b6c8d2b0012abcccc",
-    "subCategories": ["6853b91b6c8d2b0012abdddd"],
-    "brand": "6853b91b6c8d2b0012abeeee",
-    "ratingsAverage": 4.6,
-    "ratingsQuantity": 88
-  },
-  {
-    "title": "Puma RS-X",
-    "slug": "puma-rs-x",
-    "description": "Stylish sneakers inspired by retro running designs.",
-    "quantity": 44,
-    "price": 5400,
-    "priceAfterDiscount": 4999,
-    "sold": 22,
-    "colors": ["Blue", "White"],
-    "images": [
-      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-    ],
-    "imageCover": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",
-    "category": "6853b91b6c8d2b0012abcccc",
-    "subCategories": ["6853b91b6c8d2b0012abdddd"],
-    "brand": "6853b91b6c8d2b0012abeeee",
-    "ratingsAverage": 4.4,
-    "ratingsQuantity": 65
-  },
-  {
-    "title": "Apple Watch Ultra",
-    "slug": "apple-watch-ultra",
-    "description": "Smartwatch designed for sports and outdoor adventures.",
-    "quantity": 28,
-    "price": 35000,
-    "priceAfterDiscount": 33999,
-    "sold": 11,
-    "colors": ["Titanium"],
-    "images": [
-      "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d",
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
-    ],
-    "imageCover": "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d",
-    "category": "6853b91b6c8d2b0012ab1111",
-    "subCategories": ["6853b91b6c8d2b0012ab3333"],
-    "brand": "6853b91b6c8d2b0012ab4444",
-    "ratingsAverage": 4.8,
-    "ratingsQuantity": 140
-  },
-  {
-    "title": "Huawei MatePad Pro",
-    "slug": "huawei-matepad-pro",
-    "description": "High-end Android tablet with productivity features.",
-    "quantity": 13,
-    "price": 26000,
-    "priceAfterDiscount": 24999,
-    "sold": 7,
-    "colors": ["Gray"],
-    "images": [
-      "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0",
-      "https://images.unsplash.com/photo-1589739900243-4b52cd9dd1b5"
-    ],
-    "imageCover": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0",
-    "category": "6853b91b6c8d2b0012ab1111",
-    "subCategories": ["6853b91b6c8d2b0012ab3333"],
-    "brand": "6853b91b6c8d2b0012ab5555",
-    "ratingsAverage": 4.3,
-    "ratingsQuantity": 33
-  },
-  {
-    "title": "JBL Charge 5",
-    "slug": "jbl-charge-5",
-    "description": "Portable Bluetooth speaker with powerful bass.",
-    "quantity": 35,
-    "price": 7800,
-    "priceAfterDiscount": 7499,
-    "sold": 19,
-    "colors": ["Black", "Red"],
-    "images": [
-      "https://images.unsplash.com/photo-1546435770-a3e426bf472b",
-      "https://images.unsplash.com/photo-1589003077984-894e133dabab"
-    ],
-    "imageCover": "https://images.unsplash.com/photo-1546435770-a3e426bf472b",
-    "category": "6853b91b6c8d2b0012ab9999",
-    "subCategories": ["6853b91b6c8d2b0012abaaaa"],
-    "brand": "6853b91b6c8d2b0012abbbbb",
-    "ratingsAverage": 4.5,
-    "ratingsQuantity": 120
+    "ratingsQuantity": 55
   }
 ]
