@@ -3,6 +3,7 @@ const SubCategoryModel = require("./subCategory.model");
 const slugify = require("slugify");
 const ApiError = require("../../utils/apiError");
 const { body } = require("express-validator");
+const ApiFeature = require("../../utils/apiFeature");
 
 exports.createFilterObj = (req, res, next) => {
   const filterObj = {};
@@ -13,24 +14,16 @@ exports.createFilterObj = (req, res, next) => {
 };
 
 exports.getAllSubCategories = asyncHandler(async (req, res) => {
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 10;
-  const skip = (page - 1) * limit;
-  const filter = req.filterObj;
-  const totalSubCategories = await SubCategoryModel.countDocuments(filter);
 
-  const pagination = {
-    page,
-    limit,
-    results: totalSubCategories,
-  };
+  // build query 
+  const totalDocs =await SubCategoryModel.countDocuments()
+  const apiFeature = new ApiFeature(SubCategoryModel.find(), req.query).search().pagination(totalDocs).limitFields()
 
-  const subCategories = await SubCategoryModel.find(filter)
-    .skip(skip)
-    .limit(limit)
-    .populate("category", "name");
+  // execute query
+  const { mongooseQuery, paginationInfo } = apiFeature
+  const subCategories = await mongooseQuery
 
-  res.status(200).json({ data: subCategories, pagination });
+  res.status(200).json({ data: subCategories, pagination: paginationInfo });
 });
 
 exports.setCategoryIdToBody = (req, res, next) => {

@@ -1,73 +1,82 @@
 class ApiFeature {
-  constructor(mongoQuery, queryString, filters = {}) {
-    this.mongoQuery = mongoQuery;
-    this.queryString = queryString;
-    this.filters = filters;
-  }
-
-  filter() {
-    const queryFilters = { ...this.queryString };
-    const excludeFields = ["page", "limit", "sort", "fields"];
-    excludeFields.forEach((field) => delete queryFilters[field]);
-    if (queryFilters.minPrice) {
-      this.filters.price = {
-        $gte: Number(queryFilters.minPrice),
-        ...this.filters.price,
-      };
-    }
-    if (queryFilters.maxPrice) {
-      this.filters.price = {
-        $lte: Number(queryFilters.maxPrice),
-        ...this.filters.price,
-      };
+    constructor(mongooseQuery, queryString) {
+        this.mongooseQuery = mongooseQuery;
+        this.queryString = queryString;
     }
 
-    if (queryFilters.category) {
-      this.filters.category = queryFilters.category;
+
+    filter() {
+        const filters = {}
+        if (this.queryString.category) {
+            filters.category = this.queryString.category;
+        }
+        if (this.queryString.subCategory) {
+            filters.subCategory = this.queryString.subCategory;
+        }
+
+        if (this.queryString.minPrice) {
+            filters.price = { $gte: this.queryString.minPrice };
+        }
+
+        if (this.queryString.maxPrice) {
+            filters.price = { ...filters.price, $lte: this.queryString.maxPrice };
+        }
+
+
+        this.mongooseQuery.find(filters);
+        return this;
     }
-    if (this.queryString.subCategory) {
-      this.filters.subCategories = queryFilters.subCategory;
+
+
+    sort() {
+        const sortBy = this.queryString.sort?.split(",").join(" ") || "-createdAt";
+        this.mongooseQuery.sort(sortBy);
+        return this;
     }
 
-    this.mongoQuery = this.mongoQuery.find(this.filters);
-
-    return this;
-  }
-
-  search() {
-    if (this.queryString.keyword) {
-      this.filters.$or = [
-        { title: { $regex: this.queryString.keyword, $options: "i" } },
-        { description: { $regex: this.queryString.keyword, $options: "i" } },
-      ];
+    limitFields() {
+        const fields = this.queryString.fields?.split(",").join(" ") || "-__v";
+        console.log("queryString", this.queryString);
+        console.log("fields", fields);
+        this.mongooseQuery.select(fields);
+        return this;
     }
-    this.mongoQuery = this.mongoQuery.find(this.filters);
-    return this;
-  }
 
-  sort() {
-    if (this.queryString.sort) {
-      const sortBy = this.queryString.sort.split(",").join(" ") || "-createdAt";
-      this.mongoQuery = this.mongoQuery.sort(sortBy);
+    search(model) {
+        const keyword = this.queryString?.keyword || "";
+        if (model === "product") {
+            this.mongooseQuery.find({
+                $or: [
+                    { title: { $regex: keyword, $options: "i" } },
+                ]
+            });
+        } else {
+            this.mongooseQuery.find({
+                $or: [
+                    { name: { $regex: keyword, $options: "i" } }
+                ]
+            })
+        }
+        return this;
     }
-    return this;
-  }
 
-  limitFields() {
-    if (this.queryString.fields) {
-      const fields = this.queryString.fields.split(",").join(" ");
-      this.mongoQuery = this.mongoQuery.select(fields);
+    pagination(totalDocuments) {
+
+        const page = this.queryString?.page || 1;
+        const limit = this.queryString?.limit || 10;
+        const skip = (page - 1) * limit;
+        const numberOfPages = Math.ceil(totalDocuments / limit);
+
+        const pagination = {
+            page,
+            limit,
+            numberOfPages,
+            totalDocuments,
+        };
+        this.mongooseQuery.skip(skip).limit(limit);
+        this.paginationInfo = pagination;
+        return this;
     }
-    return this;
-  }
-
-  pagination() {
-    const page = this.queryString.page || 1;
-    const limit = this.queryString.limit || 10;
-    const skip = (page - 1) * limit;
-    this.mongoQuery = this.mongoQuery.skip(skip).limit(limit);
-    return this;
-  }
 }
 
 module.exports = ApiFeature;

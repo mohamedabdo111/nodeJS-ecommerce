@@ -5,68 +5,25 @@ const { query } = require("express-validator");
 const ApiFeature = require("../../utils/apiFeature");
 
 exports.getProducts = async (page, limit, queryFilters) => {
-  const skip = (page - 1) * limit;
 
-  const filters = {};
-  //   if (queryFilters.minPrice) {
-  //     filters.price = {
-  //       $gte: Number(queryFilters.minPrice),
-  //       ...filters.price,
-  //     };
-  //   }
-  //   if (queryFilters.maxPrice) {
-  //     filters.price = {
-  //       $lte: Number(queryFilters.maxPrice),
-  //       ...filters.price,
-  //     };
-  //   }
+const totalDocuments = await ProductModel.countDocuments();
 
-  //   if (queryFilters.category) {
-  //     filters.category = queryFilters.category;
-  //   }
-  //   if (queryFilters.subCategory) {
-  //     filters.subCategories = queryFilters.subCategory;
-  //   }
-
-  //   const formattedSort = sort.split(",").join(" ");
-  //   const formattedFields = fields.split(",").join(" ");
-
-  //   search by word
-  //   if (keyword) {
-  //     filters.$or = [
-  //       { title: { $regex: keyword, $options: "i" } },
-  //       { description: { $regex: keyword, $options: "i" } },
-  //     ];
-  //   }
 
   // build query
 
-  const apiFeature = new ApiFeature(ProductModel.find(), queryFilters, filters)
-    .pagination()
+  const apiFeature = new ApiFeature(ProductModel.find(), queryFilters)
     .filter()
-    .search()
+    .search("product")
     .sort()
     .limitFields()
-    .pagination();
+    .pagination(totalDocuments);
 
   // execute query
-  const products = await apiFeature.mongoQuery;
+  const {  mongooseQuery , paginationInfo } = apiFeature
+  const products = await mongooseQuery;
 
-  //   const products = await ProductModel.find(filters)
-  //     .skip(skip)
-  //     .limit(limit)
-  //     .populate("category", "name")
-  //     .populate("subCategories", "name")
-  //     .sort(formattedSort)
-  //     .select(formattedFields);
 
-  //   const pagination = {
-  //     page,
-  //     limit,
-  //     results: products.length,
-  //   };
-
-  return { products };
+  return { products, pagination: paginationInfo };
 };
 
 exports.createProduct = async (body) => {

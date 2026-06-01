@@ -16,7 +16,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
   res.status(200).json({
     status: "success",
     data: products,
-    pagination,
+    pagination ,
   });
 });
 
