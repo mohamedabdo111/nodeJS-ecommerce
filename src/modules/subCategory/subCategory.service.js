@@ -3,85 +3,84 @@ const SubCategoryModel = require("./subCategory.model");
 const slugify = require("slugify");
 const ApiError = require("../../utils/apiError");
 const { body } = require("express-validator");
+const ApiFeature = require("../../utils/apiFeature");
 
-exports.createFilterObj = (req ,res , next)=>{
+exports.createFilterObj = (req, res, next) => {
+  const filterObj = {};
+  if (req.params.categoryId) filterObj.category = req.params.categoryId;
 
-    const filterObj = {};
-    if(req.params.categoryId) filterObj.category = req.params.categoryId
-
-    req.filterObj = filterObj;
-    next();
-
-}
+  req.filterObj = filterObj;
+  next();
+};
 
 exports.getAllSubCategories = asyncHandler(async (req, res) => {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const skip = (page - 1) * limit;
-    const filter= req.filterObj 
-    const totalSubCategories = await SubCategoryModel.countDocuments(filter)
 
-    const pagination = {
-        page,
-        limit,
-        results: totalSubCategories,
-    }
+  // build query 
+  const totalDocs =await SubCategoryModel.countDocuments()
+  const apiFeature = new ApiFeature(SubCategoryModel.find(), req.query).search().pagination(totalDocs).limitFields()
 
-    const subCategories = await SubCategoryModel.find(filter).skip(skip).limit(limit);
+  // execute query
+  const { mongooseQuery, paginationInfo } = apiFeature
+  const subCategories = await mongooseQuery
 
-    res.status(200).json({ data: subCategories, pagination });
-})
+  res.status(200).json({ data: subCategories, pagination: paginationInfo });
+});
 
-
-exports.setCategoryIdToBody = (req , res , next) => {
-    if(!req.body.category) req.body.category = req.params.categoryId
-    next();
-}
-
+exports.setCategoryIdToBody = (req, res, next) => {
+  if (!req.body.category) req.body.category = req.params.categoryId;
+  next();
+};
 
 exports.createSubCategory = asyncHandler(async (req, res) => {
-    const { name, category } = req.body;
-    const subCategory = await SubCategoryModel.create({ name, slug: slugify(name), category });
+  const { name, category } = req.body;
+  const subCategory = await SubCategoryModel.create({
+    name,
+    slug: slugify(name),
+    category,
+  });
 
-    res.status(201).json({ data: subCategory });
-})
+  res.status(201).json({ data: subCategory });
+});
 
+exports.getSingleSubCategory = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
 
-exports.getSingleSubCategory = asyncHandler(async (req , res , next) => {
-    const {id} =req.params;
+  const subCategory = await SubCategoryModel.findById(id);
 
-    const subCategory = await SubCategoryModel.findById(id);
+  if (!subCategory) {
+    return next(new ApiError(404, `no sub category found for this id ${id}`));
+  }
 
-    if(!subCategory) { 
-        return next(new ApiError(404, `no sub category found for this id ${id}`))
-    }
+  res.status(200).json({ data: subCategory });
+});
 
-    res.status(200).json({ data: subCategory });
-})
+exports.updateSubCategory = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { name, category } = req.body;
 
+  const subCategory = await SubCategoryModel.findByIdAndUpdate(
+    id,
+    { name, category },
+    { new: true },
+  );
 
-exports.updateSubCategory = asyncHandler(async (req , res , next) => {
-    const { id } = req.params;
-    const { name, category } = req.body;
+  if (!subCategory) {
+    return next(new ApiError(404, `no sub category found for this id ${id}`));
+  }
 
-    const subCategory = await SubCategoryModel.findByIdAndUpdate(id , {name , category}, {new: true});
+  res
+    .status(200)
+    .json({ message: "sub category updated successfully", data: subCategory });
+});
 
-    if(!subCategory) { 
-        return next(new ApiError(404, `no sub category found for this id ${id}`))
-    }
+exports.deleteSubCategory = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
 
-    res.status(200).json({ message: "sub category updated successfully", data: subCategory });
-})
+  const subCategory = await SubCategoryModel.findByIdAndDelete(id);
 
+  if (!subCategory) {
+    return next(new ApiError(404, `no sub category found for this id ${id}`));
+  }
 
-exports.deleteSubCategory = asyncHandler(async (req , res , next) => {
-    const { id } = req.params;
-
-    const subCategory = await SubCategoryModel.findByIdAndDelete(id)
-
-    if(!subCategory){
-        return next(new ApiError(404, `no sub category found for this id ${id}`))
-    }
-
-    res.status(200).json({message: "sub category deleted successfully"})
-})
+  res.status(200).json({ message: "sub category deleted successfully" });
+});
