@@ -1,8 +1,9 @@
 const validationResultMiddleware = require("../../middlewares/validation.middleware");
-const { check, param } = require("express-validator");
+const { check, param, body } = require("express-validator");
 const CategoryModel = require("../category/category.model");
 const SubCategoryModel = require("../subCategory/subCategory.model");
 const BrandModel = require("../brands/brands.model");
+const slugify = require("slugify");
 
 exports.createProductValidation = [
   check("title").notEmpty().withMessage("Product title is required"),
@@ -81,11 +82,19 @@ exports.createProductValidation = [
       }
       return true;
     }),
+  body("title").custom((value, { req }) => {
+    req.body.slug = slugify(value, { lower: true });
+    return true;
+  }),
   validationResultMiddleware,
 ];
 
 exports.updateProductValidation = [
   param("id").isMongoId().withMessage("Invalid product id"),
+  body("title").custom((value, { req }) => {
+    req.body.slug = slugify(value, { lower: true });
+    return true;
+  }),
   validationResultMiddleware,
 ];
 

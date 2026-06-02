@@ -1,64 +1,33 @@
 const ProductModel = require("./product.model");
-const ApiError = require("../../utils/apiError");
-const slugify = require("slugify");
-const { query } = require("express-validator");
-const ApiFeature = require("../../utils/apiFeature");
+const {
+  deleteOne,
+  updateOne,
+  createOne,
+  getOne,
+  getAll,
+} = require("../../services/handlerFactory");
 
-exports.getProducts = async (page, limit, queryFilters) => {
+// @desc    Get all products
+// @route   GET /api/v1/products
+// @access  Public
+exports.getProducts = getAll(ProductModel, "product");
 
-const totalDocuments = await ProductModel.countDocuments();
+// @desc    Create product
+// @route   POST /api/v1/products
+// @access  Private
+exports.createProduct = createOne(ProductModel);
 
+// @desc    Get single product by id
+// @route   GET /api/v1/products/:id
+// @access  Public
+exports.getProductById = getOne(ProductModel);
 
-  // build query
+// @desc    Update product
+// @route   PUT /api/v1/products/:id
+// @access  Private
+exports.updateProduct = updateOne(ProductModel);
 
-  const apiFeature = new ApiFeature(ProductModel.find(), queryFilters)
-    .filter()
-    .search("product")
-    .sort()
-    .limitFields()
-    .pagination(totalDocuments);
-
-  // execute query
-  const {  mongooseQuery , paginationInfo } = apiFeature
-  const products = await mongooseQuery;
-
-
-  return { products, pagination: paginationInfo };
-};
-
-exports.createProduct = async (body) => {
-  body.slug = slugify(body.title, { lower: true });
-  return ProductModel.create(body);
-};
-
-exports.getProductById = async (id) => {
-  const product = await ProductModel.findById(id);
-  if (!product) {
-    throw new ApiError(404, "Product not found");
-  }
-  return product;
-};
-
-exports.updateProduct = async (id, body) => {
-  if (body.title) {
-    body.slug = slugify(body.title, { lower: true });
-  }
-
-  const product = await ProductModel.findByIdAndUpdate(id, body, {
-    new: true,
-  });
-
-  if (!product) {
-    throw new ApiError(404, "Product not found");
-  }
-
-  return product;
-};
-
-exports.deleteProduct = async (id) => {
-  const product = await ProductModel.findByIdAndDelete(id);
-  if (!product) {
-    throw new ApiError(404, "Product not found");
-  }
-  return product;
-};
+// @desc    Delete product
+// @route   DELETE /api/v1/products/:id
+// @access  Private
+exports.deleteProduct = deleteOne(ProductModel);
