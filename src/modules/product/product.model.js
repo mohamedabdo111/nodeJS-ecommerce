@@ -74,6 +74,12 @@ const productSchema = new Schema(
   { timestamps: true },
 );
 
+// using mongoose middleware to populate the category and subCategories and brand
+productSchema.pre(/^find/, function (next) {
+  this.populate({ path: "category", select: "name" });
+  next();
+});
+
 const ProductModel = model("Product", productSchema);
 
 module.exports = ProductModel;

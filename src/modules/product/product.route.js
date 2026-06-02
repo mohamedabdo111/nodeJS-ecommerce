@@ -5,7 +5,7 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
-} = require("./product.controller");
+} = require("./product.service");
 const {
   createProductValidation,
   getProductByIdValidation,
