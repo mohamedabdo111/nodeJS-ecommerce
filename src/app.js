@@ -1,3 +1,7 @@
+// core imports
+const path = require("path");
+
+// third party imports
 const express = require("express");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
@@ -13,6 +17,7 @@ const subCategoryRouter = require("./modules/subCategory/subCategory.route");
 const brandsRouter = require("./modules/brands/brands.route");
 const productRouter = require("./modules/product/product.route");
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../uploads")));
 if (process.env.NODE_DEV === "development") {
   app.use(morgan("dev"));
   console.log("Development mode", process.env.NODE_DEV);

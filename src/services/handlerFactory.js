@@ -34,6 +34,7 @@ exports.updateOne = (model) =>
 
 exports.createOne = (model) =>
   expressAsyncHandler(async (req, res, next) => {
+    console.log(req.body, "req.body");
     const document = await model.create(req.body);
     res
       .status(201)

@@ -14,13 +14,14 @@ const {
 } = require("./category.validation");
 const router = express.Router();
 const subCategoryRoute = require("../subCategory/subCategory.route");
-const uploadImgageCategory = require("./category.upload");
+const { uploadImgageCategory, imageProcessor } = require("./category.upload");
 
 router.use("/:categoryId/subCategories", subCategoryRoute);
 router
   .route("/")
   .post(
     uploadImgageCategory.single("image"),
+    imageProcessor,
     createCategoryValidation,
     createCategory,
   )
@@ -28,6 +29,11 @@ router
 router
   .route("/:id")
   .get(getCategoryValidation, getSingleCategory)
-  .put(updateCategoryValidation, updateCategory)
+  .put(
+    uploadImgageCategory.single("image"),
+    imageProcessor,
+    updateCategoryValidation,
+    updateCategory,
+  )
   .delete(deleteCategoryValidation, deleteCategory);
 module.exports = router;
