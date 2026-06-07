@@ -24,11 +24,12 @@ const brandSchema = new Schema(
 brandSchema.set("toJSON", {
   transform(doc, ret) {
     if (ret.image) {
-      ret.image = `${process.env.BASE_URL}/categories/${ret.image}`;
+      ret.image = `${process.env.BASE_URL}/brands/${ret.image}`;
       return ret;
     }
   },
 });
 
 const BrandModel = model("Brand", brandSchema);
+
 module.exports = BrandModel;
