@@ -57,7 +57,7 @@ exports.createProductValidation = [
     const subCategories = await SubCategoryModel.find({
       _id: { $in: subCategoryIds },
     });
-    if (subCategories.length !== subCategoryIds.length) {
+    if (subCategoryIds && subCategories.length !== subCategoryIds.length) {
       throw new Error("Some subCategories are not found");
     }
 

@@ -80,6 +80,21 @@ productSchema.pre(/^find/, function (next) {
   next();
 });
 
+productSchema.set("toJSON", {
+  transform: function (doc, ret) {
+    if (ret.imageCover) {
+      ret.imageCover = `${process.env.BASE_URL}/products/covers/${ret.imageCover}`;
+    }
+    if (ret.images) {
+      ret.images = ret.images.map(
+        (image) => `${process.env.BASE_URL}/products/images/${image}`,
+      );
+    }
+
+    return ret;
+  },
+});
+
 const ProductModel = model("Product", productSchema);
 
 module.exports = ProductModel;

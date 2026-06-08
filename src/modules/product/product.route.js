@@ -12,13 +12,27 @@ const {
   deleteProductValidation,
   updateProductValidation,
 } = require("./product.validation");
+const { uploadImageProduct, imageProcessor } = require("./product.upload");
 const router = express.Router();
 
-router.route("/").get(getProducts).post(createProductValidation, createProduct);
+router
+  .route("/")
+  .get(getProducts)
+  .post(
+    uploadImageProduct,
+    imageProcessor,
+    createProductValidation,
+    createProduct,
+  );
 router
   .route("/:id")
   .get(getProductByIdValidation, getProductById)
-  .put(updateProductValidation, updateProduct)
+  .put(
+    uploadImageProduct,
+    imageProcessor,
+    updateProductValidation,
+    updateProduct,
+  )
   .delete(deleteProductValidation, deleteProduct);
 
 module.exports = router;

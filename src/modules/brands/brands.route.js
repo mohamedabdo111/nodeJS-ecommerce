@@ -25,7 +25,12 @@ router
   .get(getAllBrands);
 router
   .route("/:id")
-  .put(createBrandValidation, updateBrand)
+  .put(
+    uploadImageBrand.single("image"),
+    imageProcessor,
+    createBrandValidation,
+    updateBrand,
+  )
   .get(getSingleBrandValidation, getSingleBrand)
   .delete(deleteBrandValidation, deleteBrand);
 
