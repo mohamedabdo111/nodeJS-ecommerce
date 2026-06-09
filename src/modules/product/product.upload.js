@@ -2,8 +2,8 @@ const multer = require("multer");
 const expressAsyncHandler = require("express-async-handler");
 const storage = multer.memoryStorage();
 const sharp = require("sharp");
-const { v4: uuidv4 } = require("uuid");
 const MulterFileFilter = require("../../utils/multerFileFilter");
+const { v4: uuidv4 } = require("uuid");
 
 const imageProcessor = expressAsyncHandler(async (req, res, next) => {
   if (!req.files) {
