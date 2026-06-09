@@ -5,8 +5,12 @@ const {
   getUser,
   updateUser,
   deleteUser,
+  updateUserPassword,
 } = require("./user.service");
-const { addNewUserValidator } = require("./user.validation");
+const {
+  addNewUserValidator,
+  updateUserPasswordValidator,
+} = require("./user.validation");
 const { uploadUserImage, imageProcessor } = require("./user.upload");
 const router = express.Router();
 
@@ -20,5 +24,11 @@ router
   .get(getUser)
   .put(uploadUserImage, imageProcessor, updateUser)
   .delete(deleteUser);
+
+router.put(
+  "/changePassword/:id",
+  updateUserPasswordValidator,
+  updateUserPassword,
+);
 
 module.exports = router;

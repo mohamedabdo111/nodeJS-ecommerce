@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const model = mongoose.model;
-
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const userSchema = new Schema(
   {
     name: {
@@ -45,6 +46,22 @@ userSchema.set("toJSON", {
     return ret;
   },
 });
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  this.password = await bcrypt.hash(this.password, saltRounds);
+  next();
+});
+
+// userSchema.pre("findOneAndUpdate", async function (next) {
+//   if (!this.isModified("password")) {
+//     return next();
+//   }
+//   this.password = await bcrypt.hash(this.password, saltRounds);
+//   next();
+// });
 
 const UserModel = model("User", userSchema);
 module.exports = UserModel;

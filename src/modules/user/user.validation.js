@@ -1,7 +1,8 @@
-const { check } = require("express-validator");
+const { check, param } = require("express-validator");
 const validationResultMiddleware = require("../../middlewares/validation.middleware");
 const slugify = require("slugify");
 const UserModel = require("./user.model");
+const bcrypt = require("bcrypt");
 exports.addNewUserValidator = [
   check("name")
     .notEmpty()
@@ -39,5 +40,39 @@ exports.addNewUserValidator = [
     return true;
   }),
 
+  validationResultMiddleware,
+];
+
+exports.updateUserPasswordValidator = [
+  param("id").isMongoId().withMessage("Invalid user id"),
+  check("currentPassword")
+    .notEmpty()
+    .withMessage("current password is required")
+    .custom(async (val, { req }) => {
+      if (!val) {
+        return true;
+      }
+      const user = await UserModel.findById(req.params.id);
+
+      if (!user) {
+        return Promise.reject("user not found");
+      }
+      const isMatch = await bcrypt.compare(val, user.password);
+      if (!isMatch) {
+        return Promise.reject("current password is incorrect");
+      }
+      return true;
+    }),
+  check("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 6 })
+    .withMessage("password must be at least 6 characters"),
+  check("confirmPassword").custom((val, { req }) => {
+    if (val !== req.body.password) {
+      return Promise.reject("confirmPassword must be equal to password");
+    }
+    return true;
+  }),
   validationResultMiddleware,
 ];
