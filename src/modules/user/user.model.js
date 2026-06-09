@@ -55,13 +55,5 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// userSchema.pre("findOneAndUpdate", async function (next) {
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
-//   this.password = await bcrypt.hash(this.password, saltRounds);
-//   next();
-// });
-
 const UserModel = model("User", userSchema);
 module.exports = UserModel;
