@@ -8,7 +8,7 @@ exports.addNewUserValidator = [
     .notEmpty()
     .withMessage("name is required")
     .custom((val, { req }) => {
-      req.body.slug = slugify(req.body.name);
+      req.body.slug = slugify(val);
       return true;
     }),
   check("email")
@@ -23,15 +23,17 @@ exports.addNewUserValidator = [
       }
       return true;
     }),
+
+  check("phone")
+    .optional()
+    .isMobilePhone("ar-EG")
+    .withMessage("Phone number must be a valid Egyptian phone number"),
+
   check("password")
     .notEmpty()
     .withMessage("password is required")
     .isLength({ min: 6 })
     .withMessage("password must be at least 6 characters"),
-  check("phone")
-    .optional()
-    .isMobilePhone("ar-EG")
-    .withMessage("Phone number must be a valid Egyptian phone number"),
 
   check("confirmPassword").custom((val, { req }) => {
     if (val !== req.body.password) {
@@ -39,6 +41,37 @@ exports.addNewUserValidator = [
     }
     return true;
   }),
+
+  validationResultMiddleware,
+];
+
+exports.updateUserValidator = [
+  param("id").isMongoId().withMessage("Invalid user id"),
+  check("name")
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
+  check("email")
+    .optional()
+    .isEmail()
+    .withMessage("invalid email")
+    .custom(async (val, { req }) => {
+      if (!val) {
+        return true;
+      }
+      const user = await UserModel.findOne({ email: val });
+      if (user && user._id.toString() !== req.params.id) {
+        return Promise.reject(new Error("email already exists"));
+      }
+      return true;
+    }),
+
+  check("phone")
+    .optional()
+    .isMobilePhone("ar-EG")
+    .withMessage("Phone number must be a valid Egyptian phone number"),
 
   validationResultMiddleware,
 ];

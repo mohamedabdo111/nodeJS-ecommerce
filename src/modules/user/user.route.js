@@ -10,6 +10,7 @@ const {
 const {
   addNewUserValidator,
   updateUserPasswordValidator,
+  updateUserValidator,
 } = require("./user.validation");
 const { uploadUserImage, imageProcessor } = require("./user.upload");
 const router = express.Router();
@@ -22,7 +23,7 @@ router
 router
   .route("/:id")
   .get(getUser)
-  .put(uploadUserImage, imageProcessor, updateUser)
+  .put(uploadUserImage, imageProcessor, updateUserValidator, updateUser)
   .delete(deleteUser);
 
 router.put(

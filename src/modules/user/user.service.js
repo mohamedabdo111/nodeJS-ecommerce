@@ -8,7 +8,6 @@ const {
 } = require("../../services/handlerFactory");
 const expressAsyncHandler = require("express-async-handler");
 const ApiError = require("../../utils/apiError");
-const slugify = require("slugify");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 exports.getAllUsers = getAll(User);
@@ -21,7 +20,7 @@ exports.updateUser = expressAsyncHandler(async (req, res, next) => {
 
   const user = await User.findByIdAndUpdate(
     id,
-    { profileImg, name, email, role, phone, slug: slugify(name) },
+    { profileImg, name, email, role, phone, slug },
     { new: true },
   );
 
