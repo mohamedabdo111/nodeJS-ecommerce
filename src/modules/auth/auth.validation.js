@@ -43,3 +43,8 @@ exports.signinValidation = [
     .withMessage("Password must be at least 6 characters"),
   validationResultMiddleware,
 ];
+
+exports.verifyResetCodeValidation = [
+  check("resetCode").notEmpty().withMessage("Reset code is required"),
+  validationResultMiddleware,
+];

@@ -34,7 +34,12 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+
+    resetCode: String,
+    resetCodeExpiredTime: Date,
+    resetCodeIsVerified: Boolean,
   },
+
   { timestamps: true },
 );
 

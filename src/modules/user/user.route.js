@@ -13,21 +13,38 @@ const {
   updateUserValidator,
 } = require("./user.validation");
 const { uploadUserImage, imageProcessor } = require("./user.upload");
+const { protectRoutes, allowedTo } = require("../auth/auth.service");
 const router = express.Router();
 
 router
   .route("/")
   .get(getAllUsers)
-  .post(uploadUserImage, imageProcessor, addNewUserValidator, addNewUser);
+  .post(
+    protectRoutes,
+    allowedTo("admin"),
+    uploadUserImage,
+    imageProcessor,
+    addNewUserValidator,
+    addNewUser,
+  );
 
 router
   .route("/:id")
   .get(getUser)
-  .put(uploadUserImage, imageProcessor, updateUserValidator, updateUser)
-  .delete(deleteUser);
+  .put(
+    protectRoutes,
+    allowedTo("admin"),
+    uploadUserImage,
+    imageProcessor,
+    updateUserValidator,
+    updateUser,
+  )
+  .delete(protectRoutes, allowedTo("admin"), deleteUser);
 
 router.put(
   "/changePassword/:id",
+  protectRoutes,
+  allowedTo("admin"),
   updateUserPasswordValidator,
   updateUserPassword,
 );

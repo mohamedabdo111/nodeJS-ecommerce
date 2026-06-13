@@ -1,4 +1,13 @@
 const globalErrorHandler = (err, req, res, next) => {
+  if (err.name === "JsonWebTokenError") {
+    err.message = "Invalid token, please login again";
+    err.statusCode = 401;
+  }
+
+  if (err.name === "TokenExpiredError") {
+    err.message = "Token expired, please login again";
+    err.statusCode = 401;
+  }
   if (process.env.NODE_DEV === "development") {
     sendErrorForDev(err, res);
   } else {
