@@ -65,8 +65,10 @@ exports.getAll = (model, modelName) =>
       .limitFields()
       .pagination(totalDocuments);
 
+
     // execute query
     const { mongooseQuery, paginationInfo } = apiFeature;
     const document = await mongooseQuery;
+    console.log(document, "document");
     res.status(200).json({ data: document, pagination: paginationInfo });
   });

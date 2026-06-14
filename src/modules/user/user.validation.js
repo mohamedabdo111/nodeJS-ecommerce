@@ -109,3 +109,19 @@ exports.updateUserPasswordValidator = [
   }),
   validationResultMiddleware,
 ];
+
+
+exports.updateLoggedUserPasswordValidator = [
+  check("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 6 })
+    .withMessage("password must be at least 6 characters"),
+  check("confirmPassword").custom((val, { req }) => {
+    if (val !== req.body.password) {
+      return Promise.reject("confirmPassword must be equal to password");
+    }
+    return true;
+  }),
+  validationResultMiddleware,
+]
