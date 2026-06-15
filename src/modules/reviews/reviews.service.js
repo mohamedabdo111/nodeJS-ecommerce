@@ -1,17 +1,55 @@
-
-
-
+const expressAsyncHandler = require("express-async-handler");
 const ReviewModel = require("./reviews.model");
-const { createOne, getAll, updateOne, deleteOne } = require("../../services/handlerFactory");
+const { deleteOne } = require("../../services/handlerFactory");
+const ApiError = require("../../utils/apiError");
 
-exports.createReview = createOne(ReviewModel);
+exports.createReview = expressAsyncHandler(async (req, res, next) => {
+  const { title, rate, user, product } = req.body;
 
+  const review = await ReviewModel.create({ title, rate, user, product });
 
-exports.getAllReviews = getAll(ReviewModel);
+  res.status(201).json({ message: "Review created successfully", review });
+});
 
-exports.getReviewsByProductId = getAll(ReviewModel, "product");
+exports.getAllReviews = expressAsyncHandler(async (req, res, next) => {
+  const { product } = req.query;
+  const filter = { };
+  const limit = req.query.limit || 10;
+  const page = req.query.page || 1;
+  const skip = (page - 1) * limit;
 
+  if(product) {
+    filter.product = product;
+  }
 
-exports.updateReview = updateOne(ReviewModel);
+  const total = await ReviewModel.countDocuments();
+
+  const pagination = {
+    page,
+    limit,
+    totalReviews: total,
+  };
+
+  const reviews = await ReviewModel.find(filter).skip(skip).limit(limit);
+
+  res.status(200).json({ data: reviews, pagination });
+});
+
+exports.updateReview = expressAsyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { title, rate, user, product } = req.body;
+  const review = await ReviewModel.findByIdAndUpdate(
+    id,
+    { title, rate, user, product },
+    { new: true },
+  );
+
+  if (!review) {
+    return next(new ApiError(404, "Review not found"));
+  }
+
+  res.status(200).json({ message: "Review updated successfully", review });
+});
+
 
 exports.deleteReview = deleteOne(ReviewModel);
