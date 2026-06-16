@@ -3,12 +3,21 @@ const ReviewModel = require("./reviews.model");
 const { deleteOne } = require("../../services/handlerFactory");
 const ApiError = require("../../utils/apiError");
 
-exports.createFilterObj = (req , res , next) => {
-  const filterObj ={}
-  if(req.params.productId) filterObj.product = req.params.productId
-  req.filterObj = filterObj
-  next()
-}
+exports.createFilterObj = (req, res, next) => {
+  const filterObj = {};
+  if (req.params.productId) {
+    filterObj.product = req.params.productId;
+    req.filterObj = filterObj;
+  }
+
+  next();
+};
+
+exports.addProductIdAndUserIdToBody = (req, res, next) => {
+  if (!req.body.product) req.body.product = req.params.productId;
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
 
 exports.createReview = expressAsyncHandler(async (req, res, next) => {
   const { title, rate, user, product } = req.body;
@@ -19,19 +28,12 @@ exports.createReview = expressAsyncHandler(async (req, res, next) => {
 });
 
 exports.getAllReviews = expressAsyncHandler(async (req, res, next) => {
-
-  const { product } = req.query;
-  const filter = { };
-
+  const filter = {};
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   const skip = (page - 1) * limit;
 
-  if(product ) {
-    filter.product = product;
-  }
-
-  if(req.filterObj){
+  if (req.filterObj) {
     filter.product = req.filterObj.product;
   }
 
@@ -63,6 +65,5 @@ exports.updateReview = expressAsyncHandler(async (req, res, next) => {
 
   res.status(200).json({ message: "Review updated successfully", review });
 });
-
 
 exports.deleteReview = deleteOne(ReviewModel);

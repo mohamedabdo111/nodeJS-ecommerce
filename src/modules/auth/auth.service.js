@@ -16,8 +16,8 @@ exports.Signup = expressAsyncHandler(async (req, res) => {
     slug: slugify(name),
   });
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+  const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE,
   });
   res.status(201).json({ user, token });
 });
@@ -33,16 +33,14 @@ exports.Signin = expressAsyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid email or password" });
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+  const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE,
   });
   res.status(200).json({ user, token });
 });
 
 exports.protectRoutes = expressAsyncHandler(async (req, res, next) => {
   let token;
-
-  console.log(req.headers.authorization, "req.headers.authorization");
   if (
     !req.headers.authorization ||
     !req.headers.authorization.startsWith("Bearer")
@@ -51,9 +49,8 @@ exports.protectRoutes = expressAsyncHandler(async (req, res, next) => {
   }
 
   token = req.headers.authorization.split(" ")[1];
-  
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
   const user = await UserModel.findById(decoded.id);
   if (!user) {
@@ -146,8 +143,8 @@ exports.resetPassword = expressAsyncHandler(async (req, res, next) => {
   user.resetCodeIsVerified = false;
   await user.save();
 
-  token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+  token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE,
   });
 
   res.status(200).json({ message: "Password reset successfully", token });
