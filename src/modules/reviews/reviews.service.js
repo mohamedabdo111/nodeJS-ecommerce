@@ -37,10 +37,10 @@ exports.getAllReviews = expressAsyncHandler(async (req, res, next) => {
 
 exports.updateReview = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const { title, rate, user, product } = req.body;
+  const { title, rate } = req.body;
   const review = await ReviewModel.findByIdAndUpdate(
     id,
-    { title, rate, user, product },
+    { title, rate },
     { new: true },
   );
 

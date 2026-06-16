@@ -71,8 +71,18 @@ const productSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
+
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
+});
 
 // using mongoose middleware to populate the category and subCategories and brand
 productSchema.pre(/^find/, function (next) {
@@ -81,6 +91,7 @@ productSchema.pre(/^find/, function (next) {
 });
 
 productSchema.set("toJSON", {
+  virtuals: true,
   transform: function (doc, ret) {
     if (ret.imageCover) {
       ret.imageCover = `${process.env.BASE_URL}/products/covers/${ret.imageCover}`;

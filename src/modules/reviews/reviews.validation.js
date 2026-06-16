@@ -34,13 +34,43 @@ exports. createReviewsValidator = [
 
 
 exports.updateReviewValidator = [
-    param("id").isMongoId().withMessage("Invalid review id"),
+    param("id").isMongoId().withMessage("Invalid review id")
+    .custom(async (val , {req} ) => {
+        const review = await ReviewModel.findById(val);
+
+        if(!review) {
+            return Promise.reject("Review not found");
+        }
+
+        if(review.user._id.toString() !== req.user.id.toString()) {
+            return Promise.reject("You are not authorized to update this review");
+        }
+        return true;
+    }),
     check("title").notEmpty().withMessage("Title is required"),
     check("rate").notEmpty().withMessage("Rate is required").isFloat({ min: 1, max: 5 }).withMessage("Rate must be between 1 and 5"),
-    check("product").notEmpty().withMessage("Product is required").isMongoId().withMessage("Invalid product id"),
-    check("user").notEmpty().withMessage("User is required").isMongoId().withMessage("Invalid user id").custom(async (val , {req }) => {
-        const {id} = req.params;
-        console.log(id, "id");
+    
+    validationResultMiddleware,
+]
+
+exports.deleteReviewValidator = [
+    param("id").isMongoId().withMessage("Invalid review id")
+    .custom(async (val , {req}) => {
+        const review = await ReviewModel.findById(val);
+
+        if(!review) {
+            return Promise.reject("Review not found");
+        }
+
+        console.log(req.user.role, "role");
+        console.log(review.user.toString(), "review user");
+        console.log(req.user.id.toString(), "user id");
+
+        if(req.user.role === "user" && review.user.toString() !== req.user.id.toString()) {
+            return Promise.reject("You are not authorized to delete this review");
+        }
+        return true;
     }),
+
     validationResultMiddleware,
 ]

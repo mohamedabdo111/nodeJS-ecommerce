@@ -40,12 +40,18 @@ exports.createOne = (model) =>
       .json({ message: "data created successfully", data: document });
   });
 
-exports.getOne = (model) =>
+exports.getOne = (model , populateOpt) =>
   expressAsyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const document = await model.findById(id);
+    const query =  model.findById(id);
+
+    if (populateOpt) {
+      query.populate(populateOpt);
+    }
+    const document = await query;
+    console.log(JSON.stringify(document, null, 2));
     if (!document) {
-      return next(new ApiError(404, `no document found for this id ${id}`));
+      return next(new ApiError(404, `no document found for this id ${id}`));  
     }
     res.status(200).json({ data: document });
   });

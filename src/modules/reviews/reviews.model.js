@@ -30,5 +30,14 @@ const reviewSchema = new schema({
     }
 }, { timestamps: true });
 
+reviewSchema.pre(/^find/, function(next){
+
+    this.populate({ path : "user" , select: "name profileImg"});
+
+    next();
+
+})
+
+
 const ReviewModel = model("Review", reviewSchema);
 module.exports = ReviewModel;

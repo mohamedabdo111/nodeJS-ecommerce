@@ -14,7 +14,10 @@ const {
 } = require("./product.validation");
 const { uploadImageProduct, imageProcessor } = require("./product.upload");
 const { protectRoutes, allowedTo } = require("../auth/auth.service");
+const reviewRouter = require("../reviews/reviews.route");
 const router = express.Router();
+
+router.use("/:productId/reviews", reviewRouter);
 
 router
   .route("/")
