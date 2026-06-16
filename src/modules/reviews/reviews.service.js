@@ -3,6 +3,13 @@ const ReviewModel = require("./reviews.model");
 const { deleteOne } = require("../../services/handlerFactory");
 const ApiError = require("../../utils/apiError");
 
+exports.createFilterObj = (req , res , next) => {
+  const filterObj ={}
+  if(req.params.productId) filterObj.product = req.params.productId
+  req.filterObj = filterObj
+  next()
+}
+
 exports.createReview = expressAsyncHandler(async (req, res, next) => {
   const { title, rate, user, product } = req.body;
 
@@ -12,14 +19,20 @@ exports.createReview = expressAsyncHandler(async (req, res, next) => {
 });
 
 exports.getAllReviews = expressAsyncHandler(async (req, res, next) => {
+
   const { product } = req.query;
   const filter = { };
+
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   const skip = (page - 1) * limit;
 
-  if(product) {
+  if(product ) {
     filter.product = product;
+  }
+
+  if(req.filterObj){
+    filter.product = req.filterObj.product;
   }
 
   const total = await ReviewModel.countDocuments();

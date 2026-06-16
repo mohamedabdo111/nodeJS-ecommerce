@@ -1,13 +1,34 @@
 const express = require("express");
-const { createReview, getReviewsByProductId, getAllReviews, updateReview, deleteReview } = require("./reviews.service");
+const {
+  createReview,
+  getReviewsByProductId,
+  getAllReviews,
+  updateReview,
+  deleteReview,
+  createFilterObj,
+} = require("./reviews.service");
 const { protectRoutes, allowedTo } = require("../auth/auth.service");
-const { createReviewsValidator, updateReviewValidator, deleteReviewValidator } = require("./reviews.validation");
+const {
+  createReviewsValidator,
+  updateReviewValidator,
+  deleteReviewValidator,
+} = require("./reviews.validation");
 
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
 
+router
+  .route("/")
+  .post(protectRoutes, allowedTo("user"), createReviewsValidator, createReview)
+  .get(createFilterObj,getAllReviews);
 
-router.route("/").post(protectRoutes,allowedTo("user") ,createReviewsValidator, createReview).get(getAllReviews);
-
-router.route("/:id").put(protectRoutes,allowedTo("user") , updateReviewValidator, updateReview).delete(protectRoutes ,allowedTo("user" , "admin") ,deleteReviewValidator , deleteReview);
+router
+  .route("/:id")
+  .put(protectRoutes, allowedTo("user"), updateReviewValidator, updateReview)
+  .delete(
+    protectRoutes,
+    allowedTo("user", "admin"),
+    deleteReviewValidator,
+    deleteReview,
+  );
 
 module.exports = router;
