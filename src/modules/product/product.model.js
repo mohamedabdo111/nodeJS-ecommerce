@@ -71,13 +71,39 @@ const productSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
+
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
+});
 
 // using mongoose middleware to populate the category and subCategories and brand
 productSchema.pre(/^find/, function (next) {
   this.populate({ path: "category", select: "name" });
   next();
+});
+
+productSchema.set("toJSON", {
+  virtuals: true,
+  transform: function (doc, ret) {
+    if (ret.imageCover) {
+      ret.imageCover = `${process.env.BASE_URL}/products/covers/${ret.imageCover}`;
+    }
+    if (ret.images) {
+      ret.images = ret.images.map(
+        (image) => `${process.env.BASE_URL}/products/images/${image}`,
+      );
+    }
+
+    return ret;
+  },
 });
 
 const ProductModel = model("Product", productSchema);

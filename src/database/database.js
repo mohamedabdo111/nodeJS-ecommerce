@@ -3,14 +3,6 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: "config.env" });
 
-const connectDB = () =>
-  mongoose
-    .connect(process.env.DB_URI)
-    .then((mes) => {
-      console.log("Connected to MongoDB");
-    })
-    .catch((err) => {
-      console.log("Error connecting to MongoDB", err);
-    });
+const connectDB = () => mongoose.connect(process.env.DB_URI);
 
 module.exports = connectDB;

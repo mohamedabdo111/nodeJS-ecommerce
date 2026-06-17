@@ -19,6 +19,15 @@ const categorySchema = new Schema(
   { timestamps: true },
 );
 
+categorySchema.set("toJSON", {
+  transform(doc, ret) {
+    if (ret.image) {
+      ret.image = `${process.env.BASE_URL}/categories/${ret.image}`;
+      return ret;
+    }
+  },
+});
+
 // model
 const CategoryModel = model("Category", categorySchema);
 

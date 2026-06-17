@@ -5,7 +5,6 @@ const ApiFeature = require("../utils/apiFeature");
 exports.deleteOne = (model) =>
   expressAsyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    console.log(id, "id");
     const Model = await model.findByIdAndDelete(id);
 
     if (!Model) {
@@ -27,6 +26,8 @@ exports.updateOne = (model) =>
       );
     }
 
+    document.save();
+
     res
       .status(200)
       .json({ message: "data updated successfully", data: document });
@@ -40,12 +41,17 @@ exports.createOne = (model) =>
       .json({ message: "data created successfully", data: document });
   });
 
-exports.getOne = (model) =>
+exports.getOne = (model , populateOpt) =>
   expressAsyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const document = await model.findById(id);
+    const query =  model.findById(id);
+
+    if (populateOpt) {
+      query.populate(populateOpt);
+    }
+    const document = await query;
     if (!document) {
-      return next(new ApiError(404, `no document found for this id ${id}`));
+      return next(new ApiError(404, `no document found for this id ${id}`));  
     }
     res.status(200).json({ data: document });
   });
@@ -58,12 +64,13 @@ exports.getAll = (model, modelName) =>
       filter = req.filterObj;
     }
     const totalDocuments = await model.countDocuments();
-    const apiFeature = new ApiFeature(model.find(filter), req.query)
+    const apiFeature = new ApiFeature(model.find(), req.query)
       .filter()
       .search(modelName)
       .sort()
       .limitFields()
       .pagination(totalDocuments);
+
 
     // execute query
     const { mongooseQuery, paginationInfo } = apiFeature;

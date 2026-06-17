@@ -12,13 +12,40 @@ const {
   deleteProductValidation,
   updateProductValidation,
 } = require("./product.validation");
+const { uploadImageProduct, imageProcessor } = require("./product.upload");
+const { protectRoutes, allowedTo } = require("../auth/auth.service");
+const reviewRouter = require("../reviews/reviews.route");
 const router = express.Router();
 
-router.route("/").get(getProducts).post(createProductValidation, createProduct);
+router.use("/:productId/reviews", reviewRouter);
+
+router
+  .route("/")
+  .get(getProducts)
+  .post(
+    protectRoutes,
+    allowedTo("admin"),
+    uploadImageProduct,
+    imageProcessor,
+    createProductValidation,
+    createProduct,
+  );
 router
   .route("/:id")
   .get(getProductByIdValidation, getProductById)
-  .put(updateProductValidation, updateProduct)
-  .delete(deleteProductValidation, deleteProduct);
+  .put(
+    protectRoutes,
+    allowedTo("admin"),
+    uploadImageProduct,
+    imageProcessor,
+    updateProductValidation,
+    updateProduct,
+  )
+  .delete(
+    protectRoutes,
+    allowedTo("admin"),
+    deleteProductValidation,
+    deleteProduct,
+  );
 
 module.exports = router;

@@ -20,7 +20,7 @@ exports.createProduct = createOne(ProductModel);
 // @desc    Get single product by id
 // @route   GET /api/v1/products/:id
 // @access  Public
-exports.getProductById = getOne(ProductModel);
+exports.getProductById = getOne(ProductModel, "reviews");
 
 // @desc    Update product
 // @route   PUT /api/v1/products/:id

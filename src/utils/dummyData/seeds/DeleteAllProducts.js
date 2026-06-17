@@ -6,11 +6,8 @@ connectDB();
 
 async function deleteAllProducts() {
   try {
-    const deleteProducts = await ProductModel.deleteMany();
-    console.log("All products deleted successfully");
-  } catch (error) {
-    console.log("Error deleting all products", error);
-  }
+    await ProductModel.deleteMany();
+  } catch (error) {}
 }
 
 deleteAllProducts();
