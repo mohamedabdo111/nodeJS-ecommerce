@@ -62,11 +62,7 @@ exports.deleteReviewValidator = [
             return Promise.reject("Review not found");
         }
 
-        console.log(req.user.role, "role");
-        console.log(review.user.toString(), "review user");
-        console.log(req.user.id.toString(), "user id");
-
-        if(req.user.role === "user" && review.user.toString() !== req.user.id.toString()) {
+        if(req.user.role === "user" && review.user._id.toString() !== req.user.id.toString()) {
             return Promise.reject("You are not authorized to delete this review");
         }
         return true;

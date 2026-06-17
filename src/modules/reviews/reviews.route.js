@@ -33,7 +33,7 @@ router
   .put(protectRoutes, allowedTo("user"), updateReviewValidator, updateReview)
   .delete(
     protectRoutes,
-    allowedTo("user", "admin"),
+    allowedTo("user"),
     deleteReviewValidator,
     deleteReview,
   );

@@ -135,8 +135,6 @@ exports.resetPassword = expressAsyncHandler(async (req, res, next) => {
     return next(new ApiError(400, "Reset code is not verified"));
   }
 
-  console.log(await bcrypt.hash(password, 10), "password");
-
   user.password = password;
   user.resetCode = null;
   user.resetCodeExpiredTime = null;

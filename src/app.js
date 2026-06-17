@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../uploads")));
 if (process.env.NODE_DEV === "development") {
   app.use(morgan("dev"));
-  console.log("Development mode", process.env.NODE_DEV);
 }
 
 // Mount

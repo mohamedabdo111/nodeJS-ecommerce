@@ -11,10 +11,7 @@ async function insertDummyProduct() {
     const products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     await ProductModel.insertMany(products);
-    console.log("Dummy products inserted successfully");
-  } catch (error) {
-    console.log("Error inserting dummy products", error);
-  }
+  } catch (error) {}
 }
 
 insertDummyProduct();

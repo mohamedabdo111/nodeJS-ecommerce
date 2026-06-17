@@ -7,13 +7,10 @@ dotenv.config({ path: "config.env" });
 const PORT = process.env.PORT;
 connectDB();
 
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const server = app.listen(PORT);
 
 // handling errors outside of express
-process.on("unhandledRejection", (err) => {
-  console.log("unhandledRejection", err.name, err.message);
+process.on("unhandledRejection", () => {
   server.close(() => {
     process.exit(1);
   });

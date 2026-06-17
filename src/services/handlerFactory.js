@@ -5,7 +5,6 @@ const ApiFeature = require("../utils/apiFeature");
 exports.deleteOne = (model) =>
   expressAsyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    console.log(id, "id");
     const Model = await model.findByIdAndDelete(id);
 
     if (!Model) {
@@ -26,6 +25,8 @@ exports.updateOne = (model) =>
         new ApiError(404, `no document found for this id ${req.params.id}`),
       );
     }
+
+    document.save();
 
     res
       .status(200)
@@ -49,7 +50,6 @@ exports.getOne = (model , populateOpt) =>
       query.populate(populateOpt);
     }
     const document = await query;
-    console.log(JSON.stringify(document, null, 2));
     if (!document) {
       return next(new ApiError(404, `no document found for this id ${id}`));  
     }
@@ -75,6 +75,5 @@ exports.getAll = (model, modelName) =>
     // execute query
     const { mongooseQuery, paginationInfo } = apiFeature;
     const document = await mongooseQuery;
-    console.log(document, "document");
     res.status(200).json({ data: document, pagination: paginationInfo });
   });
