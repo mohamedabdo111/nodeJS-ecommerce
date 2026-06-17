@@ -19,6 +19,8 @@ const productRouter = require("./modules/product/product.route");
 const userRouter = require("./modules/user/user.route");
 const authRouter = require("./modules/auth/auth.route");
 const reviewRouter = require("./modules/reviews/reviews.route");
+const wishlistRouter = require("./modules/wishlist/wishlist.route");
+const userAddressRouter = require("./modules/userAddress/userAddress.route");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../uploads")));
 if (process.env.NODE_DEV === "development") {
@@ -33,6 +35,8 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/wishlist", wishlistRouter);
+app.use("/api/v1/userAddress", userAddressRouter);
 // Handle all routes
 app.use((req, res, next) => {
   const path = req.originalUrl;

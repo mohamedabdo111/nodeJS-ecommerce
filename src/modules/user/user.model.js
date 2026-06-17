@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const model = mongoose.model;
 const bcrypt = require("bcrypt");
+const { ref } = require("process");
 const saltRounds = 10;
 const userSchema = new Schema(
   {
@@ -34,6 +35,25 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+
+    // child reference
+    wishlist: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+
+    address: [
+      {
+        title: String,
+        details: String,
+        phone: String,
+        city: String,
+        postalCode: String,
+        country: String,
+      },
+    ],
 
     resetCode: String,
     resetCodeExpiredTime: Date,
