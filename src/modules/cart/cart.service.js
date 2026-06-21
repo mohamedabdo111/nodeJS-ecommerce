@@ -1,6 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
 const CartModel = require("./cart.model");
 const ProductModel = require("../product/product.model");
+const CouponModel = require("../coupon/coupon.model");
+const ApiError = require("../../utils/apiError");
 
 exports.addProductToCart = expressAsyncHandler(async (req, res) => {
   const product = await ProductModel.findById(req.body.productId);
@@ -122,18 +124,40 @@ exports.UpdateCartItemQuantity = expressAsyncHandler(async (req, res) => {
       "cartItems._id": cartItemId,
     },
     {
-        $set: {
-            "cartItems.$.quantity": quantity,
-        },
+      $set: {
+        "cartItems.$.quantity": quantity,
+      },
     },
     { new: true },
   );
 
-  if(!cart) {
+  if (!cart) {
     return res.status(404).json({ message: "Cart not found" });
   }
 
-  res.status(200).json({ message: "Cart item quantity updated successfully", data: cart });
+  res
+    .status(200)
+    .json({ message: "Cart item quantity updated successfully", data: cart });
 });
 
+exports.applyCoupon = expressAsyncHandler(async (req, res, next) => {
+  const couponData = await CouponModel.findOne({
+    name: req.body.coupon,
+    expireDate: { $gt: Date.now() },
+  });
 
+  if (!couponData) {
+    return next(new ApiError(404, "Coupon not found"));
+  }
+
+  const cart = await CartModel.findOne({ user: req.user._id });
+  if (!cart) {
+    return next(new ApiError(404, "Cart not found"));
+  }
+
+  cart.totalPriceAfterDiscount =
+    cart.totalPrice - (cart.totalPrice * couponData.discount) / 100;
+  await cart.save();
+
+  res.status(200).json({ message: "Coupon applied successfully", data: cart });
+});
