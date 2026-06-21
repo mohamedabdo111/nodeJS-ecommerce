@@ -1,11 +1,12 @@
 const express = require("express");
-const { CreateCart, GetCartById } = require("./cart.service");
+const { addProductToCart, getLoggedUserCart, RemoveSpecificCartItem, clearCart, UpdateCartItemQuantity, applyCoupon } = require("./cart.service");
 const { protectRoutes, allowedTo } = require("../auth/auth.service");
 const router = express.Router();
+router.use(protectRoutes, allowedTo("user"));
+router.route("/").post(addProductToCart).get(getLoggedUserCart).delete(clearCart);
 
-router.use(protectRoutes, allowedTo("user", "admin"));
-router.route("/").post(CreateCart);
+router.route("/:cartItemId").delete(RemoveSpecificCartItem).put(UpdateCartItemQuantity);
 
-router.route("/:id").get(GetCartById);
+router.route("/applyCoupon").post(applyCoupon);
 
 module.exports = router;
