@@ -23,6 +23,7 @@ const wishlistRouter = require("./modules/wishlist/wishlist.route");
 const userAddressRouter = require("./modules/userAddress/userAddress.route");
 const couponRouter = require("./modules/coupon/coupon.route");
 const cartRouter = require("./modules/cart/cart.route");
+const orderRouter = require("./modules/orders/orders.route");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../uploads")));
 if (process.env.NODE_DEV === "development") {
@@ -41,6 +42,7 @@ app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/userAddress", userAddressRouter);
 app.use("/api/v1/coupons", couponRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/orders", orderRouter);
 // Handle all routes
 app.use((req, res, next) => {
   const path = req.originalUrl;
