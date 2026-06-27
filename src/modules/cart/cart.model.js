@@ -35,5 +35,13 @@ const cartSchema = new Schema(
   { timestamps: true },
 );
 
+cartSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "cartItems.product",
+    select: "title price",
+  });
+  next();
+});
+
 const CartModel = model("Cart", cartSchema);
 module.exports = CartModel;

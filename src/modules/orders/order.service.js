@@ -4,7 +4,7 @@ const ApiError = require("../../utils/apiError");
 const OrderModel = require("./order.model");
 const ProductModel = require("../product/product.model");
 const { getAll } = require("../../services/handlerFactory");
-
+const stripe = require("stripe")(process.env.SECRET_KEY);
 exports.createCashOrder = expressAsyncHandler(async (req, res, next) => {
   // 1-get cart from user
   const cart = await CartModel.findOne({ user: req.user._id });
@@ -101,7 +101,7 @@ exports.updateOrderStatus = expressAsyncHandler(async (req, res, next) => {
   const order = await OrderModel.findByIdAndUpdate(
     req.params.id,
     {
-      status : status,
+      status: status,
     },
     { new: true },
   );
@@ -110,5 +110,40 @@ exports.updateOrderStatus = expressAsyncHandler(async (req, res, next) => {
     return next(new ApiError(404, "Order not found"));
   }
 
-  res.status(200).json({ message: "Order status updated successfully", data: order });
+  res
+    .status(200)
+    .json({ message: "Order status updated successfully", data: order });
+});
+
+exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
+  const cart = await CartModel.findOne({ user: req.user._id });
+
+  const lineItems = cart.cartItems.map((item) => {
+    return {
+      quantity: item.quantity,
+      price_data: {
+        currency: "egp",
+        product_data: {
+          name: item.product.title,
+        },
+        unit_amount: item.price * 100,
+      },
+    };
+  });
+  const createSession = await stripe.checkout.sessions.create({
+    line_items: lineItems,
+    mode: "payment",
+    success_url: `${process.env.BASE_URL}/checkout/success`,
+    cancel_url: `${process.env.BASE_URL}/checkout/cancel`,
+    // metadata: {
+    //   userId: req.user._id,
+    //   cartId: cart._id,
+    // },
+  });
+
+
+  res.status(200).json({
+    message: "Payment session created successfully",
+    data: createSession.url,
+  });
 });
