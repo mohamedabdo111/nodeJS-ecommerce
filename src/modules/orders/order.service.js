@@ -4,6 +4,7 @@ const ApiError = require("../../utils/apiError");
 const OrderModel = require("./order.model");
 const ProductModel = require("../product/product.model");
 const { getAll } = require("../../services/handlerFactory");
+const express = require("express");
 const stripe = require("stripe")(process.env.SECRET_KEY);
 exports.createCashOrder = expressAsyncHandler(async (req, res, next) => {
   // 1-get cart from user
@@ -141,9 +142,36 @@ exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
     // },
   });
 
-
   res.status(200).json({
     message: "Payment session created successfully",
     data: createSession.url,
   });
+});
+
+exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
+  (express.raw({ type: "application/json" }),
+    (request, response) => {
+      let event = request.body;
+      // Only verify the event if you have an endpoint secret defined.
+      // Otherwise use the basic event deserialized with JSON.parse
+      if (process.env.STRIPE_SECRET_KEY) {
+        // Get the signature sent by Stripe
+        const signature = request.headers["stripe-signature"];
+        try {
+          event = stripe.webhooks.constructEvent(
+            request.body,
+            signature,
+            process.env.STRIPE_SECRET_KEY,
+          );
+        } catch (err) {
+          console.log(
+            `⚠️  Webhook signature verification failed.`,
+            err.message,
+          );
+          return response.sendStatus(400);
+        }
+      }
+
+      console.log("event", event);
+    });
 });
