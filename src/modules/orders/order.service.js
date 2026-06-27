@@ -4,7 +4,8 @@ const ApiError = require("../../utils/apiError");
 const OrderModel = require("./order.model");
 const ProductModel = require("../product/product.model");
 const { getAll } = require("../../services/handlerFactory");
-
+const express = require("express");
+const stripe = require("stripe")(process.env.SECRET_KEY);
 exports.createCashOrder = expressAsyncHandler(async (req, res, next) => {
   // 1-get cart from user
   const cart = await CartModel.findOne({ user: req.user._id });
@@ -101,7 +102,7 @@ exports.updateOrderStatus = expressAsyncHandler(async (req, res, next) => {
   const order = await OrderModel.findByIdAndUpdate(
     req.params.id,
     {
-      status : status,
+      status: status,
     },
     { new: true },
   );
@@ -110,5 +111,67 @@ exports.updateOrderStatus = expressAsyncHandler(async (req, res, next) => {
     return next(new ApiError(404, "Order not found"));
   }
 
-  res.status(200).json({ message: "Order status updated successfully", data: order });
+  res
+    .status(200)
+    .json({ message: "Order status updated successfully", data: order });
+});
+
+exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
+  const cart = await CartModel.findOne({ user: req.user._id });
+
+  const lineItems = cart.cartItems.map((item) => {
+    return {
+      quantity: item.quantity,
+      price_data: {
+        currency: "egp",
+        product_data: {
+          name: item.product.title,
+        },
+        unit_amount: item.price * 100,
+      },
+    };
+  });
+  const createSession = await stripe.checkout.sessions.create({
+    line_items: lineItems,
+    mode: "payment",
+    success_url: `${process.env.BASE_URL}/checkout/success`,
+    cancel_url: `${process.env.BASE_URL}/checkout/cancel`,
+    // metadata: {
+    //   userId: req.user._id,
+    //   cartId: cart._id,
+    // },
+  });
+
+  res.status(200).json({
+    message: "Payment session created successfully",
+    data: createSession.url,
+  });
+});
+
+exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
+  (express.raw({ type: "application/json" }),
+    (request, response) => {
+      let event = request.body;
+      // Only verify the event if you have an endpoint secret defined.
+      // Otherwise use the basic event deserialized with JSON.parse
+      if (process.env.STRIPE_SECRET_KEY) {
+        // Get the signature sent by Stripe
+        const signature = request.headers["stripe-signature"];
+        try {
+          event = stripe.webhooks.constructEvent(
+            request.body,
+            signature,
+            process.env.STRIPE_SECRET_KEY,
+          );
+        } catch (err) {
+          console.log(
+            `⚠️  Webhook signature verification failed.`,
+            err.message,
+          );
+          return response.sendStatus(400);
+        }
+      }
+
+      console.log("event", event);
+    });
 });
