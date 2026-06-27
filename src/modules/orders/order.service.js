@@ -149,6 +149,7 @@ exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
 });
 
 exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
+  console.log("testtss");
   (express.raw({ type: "application/json" }),
     (request, response) => {
       let event = request.body;
