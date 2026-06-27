@@ -60,20 +60,24 @@ exports.getAll = (model, modelName) =>
   expressAsyncHandler(async (req, res) => {
     // build query
     let filter = {};
+
     if (req.filterObj) {
       filter = req.filterObj;
     }
+    
     const totalDocuments = await model.countDocuments();
-    const apiFeature = new ApiFeature(model.find(), req.query)
+    const apiFeature = new ApiFeature(model.find(filter), req.query)
+
       .filter()
       .search(modelName)
       .sort()
       .limitFields()
       .pagination(totalDocuments);
 
-
     // execute query
     const { mongooseQuery, paginationInfo } = apiFeature;
     const document = await mongooseQuery;
+
+    console.log(document);
     res.status(200).json({ data: document, pagination: paginationInfo });
   });

@@ -39,6 +39,8 @@ class ApiFeature {
 
   search(model) {
     const keyword = this.queryString?.keyword || "";
+    if (!keyword) return this;
+
     if (model === "product") {
       this.mongooseQuery.find({
         $or: [{ title: { $regex: keyword, $options: "i" } }],
