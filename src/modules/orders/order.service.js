@@ -5,7 +5,7 @@ const OrderModel = require("./order.model");
 const ProductModel = require("../product/product.model");
 const { getAll } = require("../../services/handlerFactory");
 const express = require("express");
-const stripe = require("stripe")(process.env.SECRET_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.createCashOrder = expressAsyncHandler(async (req, res, next) => {
   // 1-get cart from user
   const cart = await CartModel.findOne({ user: req.user._id });
@@ -154,14 +154,14 @@ exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
       let event = request.body;
       // Only verify the event if you have an endpoint secret defined.
       // Otherwise use the basic event deserialized with JSON.parse
-      if (process.env.STRIPE_SECRET_KEY) {
+      if (process.env.STRIPE_SIGNING_SECRET) {
         // Get the signature sent by Stripe
         const signature = request.headers["stripe-signature"];
         try {
           event = stripe.webhooks.constructEvent(
             request.body,
             signature,
-            process.env.STRIPE_SECRET_KEY,
+            process.env.STRIPE_SIGNING_SECRET,
           );
         } catch (err) {
           console.log(
