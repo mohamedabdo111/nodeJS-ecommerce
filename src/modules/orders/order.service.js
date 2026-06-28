@@ -150,17 +150,16 @@ exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
 
 exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
   console.log("testtss");
-  (express.raw({ type: "application/json" }),
-    (request, response) => {
-      let event = request.body;
+
+      let event = req.body;
       // Only verify the event if you have an endpoint secret defined.
       // Otherwise use the basic event deserialized with JSON.parse
       if (process.env.STRIPE_SIGNING_SECRET) {
         // Get the signature sent by Stripe
-        const signature = request.headers["stripe-signature"];
+        const signature = req.headers["stripe-signature"];
         try {
           event = stripe.webhooks.constructEvent(
-            request.body,
+            req.body,
             signature,
             process.env.STRIPE_SIGNING_SECRET,
           );
@@ -169,10 +168,12 @@ exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
             `⚠️  Webhook signature verification failed.`,
             err.message,
           );
-          return response.sendStatus(400);
+          return res.sendStatus(400);
         }
       }
 
-      console.log("event", event);
-    });
+      if(event){
+        console.log("checkout is compeleted",);
+      }
+    
 });
