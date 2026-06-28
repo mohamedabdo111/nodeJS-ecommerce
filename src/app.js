@@ -33,7 +33,7 @@ if (process.env.NODE_DEV === "development") {
 
 // Mount
 
-app.post("/webhook-checkout", webHookHandler);
+app.post("/webhook-checkout",express.raw({ type: "application/json" }), webHookHandler);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subCategories", subCategoryRouter);
 app.use("/api/v1/brands", brandsRouter);

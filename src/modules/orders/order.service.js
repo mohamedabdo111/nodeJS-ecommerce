@@ -158,6 +158,7 @@ exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
         // Get the signature sent by Stripe
         const signature = req.headers["stripe-signature"];
         try {
+          console.log("signature", signature);
           event = stripe.webhooks.constructEvent(
             req.body,
             signature,
