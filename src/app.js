@@ -25,6 +25,8 @@ const couponRouter = require("./modules/coupon/coupon.route");
 const cartRouter = require("./modules/cart/cart.route");
 const orderRouter = require("./modules/orders/orders.route");
 const { webHookHandler } = require("./modules/orders/order.service");
+
+app.post("/webhook-checkout",express.raw({ type: "application/json" }), webHookHandler);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../uploads")));
 if (process.env.NODE_DEV === "development") {
@@ -33,7 +35,7 @@ if (process.env.NODE_DEV === "development") {
 
 // Mount
 
-app.post("/webhook-checkout",express.raw({ type: "application/json" }), webHookHandler);
+
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subCategories", subCategoryRouter);
 app.use("/api/v1/brands", brandsRouter);
