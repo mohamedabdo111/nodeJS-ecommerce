@@ -152,7 +152,7 @@ exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
   });
 });
 
-exports.createOrderFromSession = expressAsyncHandler(async (userId, cartId) => {
+const createOrderFromSession = expressAsyncHandler(async (userId, cartId) => {
   const cart = await CartModel.findOne({ _id: cartId });
   if(!cart){
     throw new ApiError(404, "Cart not found");
