@@ -1,8 +1,9 @@
 const nodemailer = require("nodemailer");
 const SendEmail = async (email, subject, message) => {
-  
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD, // The 16-character App Password
@@ -17,10 +18,11 @@ const SendEmail = async (email, subject, message) => {
   };
 
   try {
+    await transporter.verify();
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.log(error);
-    throw error
+    throw error;
   }
 };
 
