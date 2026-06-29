@@ -5,6 +5,7 @@ const OrderModel = require("./order.model");
 const ProductModel = require("../product/product.model");
 const { getAll } = require("../../services/handlerFactory");
 const express = require("express");
+const SendEmail = require("../../utils/sendEmail");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.createCashOrder = expressAsyncHandler(async (req, res, next) => {
   // 1-get cart from user
@@ -193,6 +194,10 @@ const createOrderFromSession = expressAsyncHandler(async (userId, cartId) => {
     },
   }));
 
+  if(order){
+    // send email to user 
+    await SendEmail("moabdo346@gmail.com", "Order Created", `Your order has been created successfully. Order ID: ${order._id}`);
+  }
   await ProductModel.bulkWrite(bulkOperations);
   await CartModel.findByIdAndDelete(cart._id);
 
