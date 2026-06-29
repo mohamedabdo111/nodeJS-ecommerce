@@ -19,10 +19,8 @@ const SendEmail = async (email, subject, message) => {
   try {
     await transporter.sendMail(mailOptions);
   } catch (error) {
-    return Promise.reject({
-      message: "Failed to send email",
-      statusCode: 500,
-    });
+    console.log(error);
+    throw error
   }
 };
 
