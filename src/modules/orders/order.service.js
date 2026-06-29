@@ -118,6 +118,10 @@ exports.updateOrderStatus = expressAsyncHandler(async (req, res, next) => {
 
 exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
   const cart = await CartModel.findOne({ user: req.user._id });
+  
+  if(!cart){
+    return next(new ApiError(404, "Cart not found"));
+  }
 
   const lineItems = cart.cartItems.map((item) => {
     return {
@@ -136,10 +140,10 @@ exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
     mode: "payment",
     success_url: `${process.env.BASE_URL}/checkout/success`,
     cancel_url: `${process.env.BASE_URL}/checkout/cancel`,
-    // metadata: {
-    //   userId: req.user._id,
-    //   cartId: cart._id,
-    // },
+    metadata: {
+      userId: req.user._id.toString(),
+      cartId: cart._id.toString(),
+    },
   });
 
   res.status(200).json({
@@ -148,6 +152,41 @@ exports.CreatePaymentSession = expressAsyncHandler(async (req, res, next) => {
   });
 });
 
+exports.createOrderFromSession = expressAsyncHandler(async (userId, cartId) => {
+  const cart = await CartModel.findOne({ _id: cartId });
+  if(!cart){
+    throw new ApiError(404, "Cart not found");
+  }
+  const order = await OrderModel.create({
+    user: userId,
+    cartItems: cart.cartItems,
+    totalPrice: cart.totalPrice,
+    totalPriceAfterDiscount: cart.totalPriceAfterDiscount,
+    paymentMethod: "card",
+    isPaid: true,
+    paidAt: Date.now(),
+    status: "pending",
+  });
+
+  const bulkOperations = cart.cartItems.map((item) => ({
+    updateOne: {
+      filter: {
+        _id: item.product,
+      },
+      update: {
+        $inc: {
+          quantity: -item.quantity,
+          sold: +item.quantity,
+        },
+      },
+    },
+  }));
+
+  await ProductModel.bulkWrite(bulkOperations);
+  await CartModel.findByIdAndDelete(cart._id);
+
+  return order;
+});
 exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
   console.log("testtss");
 
@@ -173,8 +212,9 @@ exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
         }
       }
 
-      if(event){
-        console.log("checkout is compeleted",);
+      if(event.type === "checkout.session.completed"){
+        await createOrderFromSession(event.metadata.userId, event.metadata.cartId);
+        
       }
     
 });
