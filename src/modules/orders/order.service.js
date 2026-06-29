@@ -157,6 +157,17 @@ exports.createOrderFromSession = expressAsyncHandler(async (userId, cartId) => {
   if(!cart){
     throw new ApiError(404, "Cart not found");
   }
+
+  for(const item of cart.cartItems){
+    const product = await ProductModel.findById(item.product);
+    if(!product){
+      throw new ApiError(404, "Product not found");
+    }
+    if(product.quantity < item.quantity){
+      throw new ApiError(400, "Product quantity is not available");
+    }
+  }
+
   const order = await OrderModel.create({
     user: userId,
     cartItems: cart.cartItems,
@@ -213,8 +224,12 @@ exports.webHookHandler = expressAsyncHandler(async (req, res, next) => {
       }
 
       if(event.type === "checkout.session.completed"){
-        await createOrderFromSession(event.metadata.userId, event.metadata.cartId);
+        const session = event.data.object;
+        const { userId, cartId } = session.metadata;
+        await createOrderFromSession(userId, cartId);
         
       }
+
+      return res.sendStatus(200);
     
 });
