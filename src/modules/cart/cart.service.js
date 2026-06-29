@@ -33,7 +33,7 @@ exports.addProductToCart = expressAsyncHandler(async (req, res) => {
     // if not , add the new product to the cart
 
     const cartItemIndex = cart.cartItems.findIndex(
-      (item) => item.product.toString() === product._id.toString(),
+      (item) => item.product._id.toString() === product._id.toString(),
     );
     if (cartItemIndex > -1) {
       if (cart.cartItems[cartItemIndex].quantity < product.quantity) {
