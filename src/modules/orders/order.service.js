@@ -194,10 +194,6 @@ const createOrderFromSession = expressAsyncHandler(async (userId, cartId) => {
     },
   }));
 
-  if(order){
-    // send email to user 
-    await SendEmail("moabdo346@gmail.com", "Order Created", `Your order has been created successfully. Order ID: ${order._id}`);
-  }
   await ProductModel.bulkWrite(bulkOperations);
   await CartModel.findByIdAndDelete(cart._id);
 
